@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Liquid Web Example</title>
+    <style>
+      :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #111318; color: #f8fafc; }
+      main { width: min(88vw, 620px); display: grid; gap: 18px; justify-items: center; }
+      canvas { width: 100%; aspect-ratio: 1; height: auto; display: block; }
+      .controls { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center; }
+      label, output { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: #cbd5e1; }
+      input { width: 18px; height: 18px; accent-color: #38bdf8; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <canvas id="example" width="384" height="384"></canvas>
+      <div class="controls">
+        <label><input id="reduced-motion" type="checkbox" /> Reduced motion</label>
+        <output id="backend">backend: pending</output>
+      </div>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

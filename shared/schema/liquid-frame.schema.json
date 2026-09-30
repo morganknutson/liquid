@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://addy.dev/liquid/schema/liquid-frame.v1.json",
+  "title": "Liquid Evaluator Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "sceneId", "fixtureVersion", "samples"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "sceneId": { "type": "string" },
+    "fixtureVersion": { "type": "integer", "minimum": 1 },
+    "samples": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/sample" }
+    }
+  },
+  "$defs": {
+    "point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": { "x": { "type": "number" }, "y": { "type": "number" } }
+    },
+    "capsule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end", "radius"],
+      "properties": {
+        "start": { "$ref": "#/$defs/point" },
+        "end": { "$ref": "#/$defs/point" },
+        "radius": { "type": "number" }
+      }
+    },
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": {
+        "type": { "enum": ["M", "L", "C", "Z"] },
+        "values": { "type": "array", "items": { "type": "number" } }
+      }
+    },
+    "sample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "progress",
+        "phase",
+        "events",
+        "renderMode",
+        "sourceOpacity",
+        "targetOpacity",
+        "anchor",
+        "leftLeg",
+        "rightLeg",
+        "crossbar",
+        "bridge",
+        "blendRadius",
+        "targetMix",
+        "cornerSharpness",
+        "endpointCommands"
+      ],
+      "properties": {
+        "label": { "type": "string" },
+        "progress": { "type": "number", "minimum": 0, "maximum": 1 },
+        "phase": { "type": "string" },
+        "events": { "type": "array", "items": { "type": "string" } },
+        "renderMode": { "enum": ["sourcePath", "field", "targetPath", "crossfade"] },
+        "sourceOpacity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "targetOpacity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "anchor": { "$ref": "#/$defs/point" },
+        "leftLeg": { "$ref": "#/$defs/capsule" },
+        "rightLeg": { "$ref": "#/$defs/capsule" },
+        "crossbar": { "$ref": "#/$defs/capsule" },
+        "bridge": { "$ref": "#/$defs/capsule" },
+        "blendRadius": { "type": "number" },
+        "targetMix": { "type": "number" },
+        "cornerSharpness": { "type": "number" },
+        "endpointCommands": {
+          "type": ["array", "null"],
+          "items": { "$ref": "#/$defs/command" }
+        }
+      }
+    }
+  }
+}

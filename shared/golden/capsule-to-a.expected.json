@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "sceneId": "capsule-to-a",
+  "fixtureVersion": 1,
+  "tolerance": 0.000001,
+  "keyPoses": [
+    { "progress": 0, "phase": "sourceHold", "renderMode": "sourcePath", "bridgeRadius": 0, "targetMix": 0 },
+    { "progress": 0.2, "phase": "anticipation", "renderMode": "field", "bridgeRadius": 8, "targetMix": 0 },
+    { "progress": 0.4, "phase": "bifurcation", "renderMode": "field", "bridgeRadius": 8, "targetMix": 0 },
+    { "progress": 0.6, "phase": "adhesion", "renderMode": "field", "bridgeRadius": 5.5, "targetMix": 0.02 },
+    { "progress": 0.719999, "phase": "adhesion", "renderMode": "field", "bridgeRadius": 2, "targetMix": 0.12 },
+    { "progress": 0.72, "phase": "release", "renderMode": "field", "bridgeRadius": 0, "targetMix": 0.12 },
+    { "progress": 0.75, "phase": "release", "renderMode": "field", "bridgeRadius": 0, "targetMix": 0.22 },
+    { "progress": 0.9, "phase": "relaxation", "renderMode": "field", "bridgeRadius": 0, "targetMix": 0.82 },
+    { "progress": 0.98, "phase": "endpointLock", "renderMode": "field", "bridgeRadius": 0, "targetMix": 1 },
+    { "progress": 1, "phase": "endpointLock", "renderMode": "targetPath", "bridgeRadius": 0, "targetMix": 1 }
+  ],
+  "endpointIdentity": {
+    "sourceAssetId": "addy-spinner",
+    "sourceShapeId": "bar-left",
+    "sourceSubpathIndex": 2,
+    "targetAssetId": "addy-a",
+    "targetShapeId": "letter-a"
+  }
+}

@@ -1,0 +1,220 @@
+{
+  "$schema": "../schema/liquid-scene.schema.json",
+  "schemaVersion": 1,
+  "id": "capsule-to-a",
+  "fixtureVersion": 1,
+  "durationMs": 1600,
+  "coordinateSpace": {
+    "width": 158.991,
+    "height": 151.008
+  },
+  "fillRule": "nonzero",
+  "source": {
+    "assetId": "addy-spinner",
+    "shapeId": "bar-left",
+    "transform": {
+      "translateX": 52.3954,
+      "translateY": -22.8516,
+      "scaleX": 1,
+      "scaleY": 1
+    },
+    "commands": [
+      { "type": "M", "values": [27.0996, 22.8516] },
+      { "type": "C", "values": [42.0663, 22.8516, 54.1992, 34.9845, 54.1992, 49.9512] },
+      { "type": "L", "values": [54.1992, 104.15] },
+      { "type": "C", "values": [54.1992, 119.117, 42.0664, 131.251, 27.0996, 131.251] },
+      { "type": "C", "values": [12.1329, 131.251, 0, 119.117, 0, 104.15] },
+      { "type": "L", "values": [0, 49.9512] },
+      { "type": "C", "values": [0.000049, 34.9845, 12.1329, 22.8516, 27.0996, 22.8516] },
+      { "type": "Z" }
+    ]
+  },
+  "target": {
+    "assetId": "addy-a",
+    "shapeId": "letter-a",
+    "transform": {
+      "translateX": 0,
+      "translateY": 0,
+      "scaleX": 1,
+      "scaleY": 1
+    },
+    "commands": [
+      { "type": "M", "values": [0, 151.008] },
+      { "type": "L", "values": [56.1013, 0] },
+      { "type": "L", "values": [103.111, 0] },
+      { "type": "L", "values": [158.991, 151.008] },
+      { "type": "L", "values": [111.094, 151.008] },
+      { "type": "L", "values": [102.89, 123.955] },
+      { "type": "L", "values": [53.4403, 123.955] },
+      { "type": "L", "values": [44.5706, 151.008] },
+      { "type": "L", "values": [0, 151.008] },
+      { "type": "Z" },
+      { "type": "M", "values": [64.971, 89.1412] },
+      { "type": "L", "values": [92.4673, 89.1412] },
+      { "type": "L", "values": [79.3844, 45.6793] },
+      { "type": "L", "values": [64.971, 89.1412] },
+      { "type": "Z" }
+    ]
+  },
+  "phases": [
+    { "id": "sourceHold", "start": 0, "end": 0.12 },
+    { "id": "anticipation", "start": 0.12, "end": 0.24 },
+    { "id": "bifurcation", "start": 0.24, "end": 0.48 },
+    { "id": "adhesion", "start": 0.48, "end": 0.72 },
+    { "id": "release", "start": 0.72, "end": 0.76 },
+    { "id": "relaxation", "start": 0.76, "end": 0.98 },
+    { "id": "endpointLock", "start": 0.98, "end": 1 }
+  ],
+  "thresholds": [
+    { "id": "adhesionRelease", "at": 0.72 },
+    { "id": "endpointLock", "at": 0.98 }
+  ],
+  "poses": [
+    {
+      "at": 0,
+      "easing": "linear",
+      "frame": {
+        "anchor": { "x": 79.495, "y": 27.0996 },
+        "leftLeg": { "start": { "x": 79.495, "y": 27.0996 }, "end": { "x": 79.495, "y": 81.2998 }, "radius": 27.0996 },
+        "rightLeg": { "start": { "x": 79.495, "y": 27.0996 }, "end": { "x": 79.495, "y": 81.2998 }, "radius": 27.0996 },
+        "crossbar": { "start": { "x": 79.495, "y": 70 }, "end": { "x": 79.495, "y": 70 }, "radius": 0 },
+        "bridge": { "start": { "x": 79.495, "y": 88 }, "end": { "x": 79.495, "y": 88 }, "radius": 0 },
+        "blendRadius": 0,
+        "targetMix": 0,
+        "cornerSharpness": 0
+      }
+    },
+    {
+      "at": 0.2,
+      "easing": "smoothStep",
+      "frame": {
+        "anchor": { "x": 79.495, "y": 26 },
+        "leftLeg": { "start": { "x": 79.495, "y": 26 }, "end": { "x": 76, "y": 91 }, "radius": 24.5 },
+        "rightLeg": { "start": { "x": 79.495, "y": 26 }, "end": { "x": 83, "y": 91 }, "radius": 24.5 },
+        "crossbar": { "start": { "x": 74, "y": 70 }, "end": { "x": 85, "y": 70 }, "radius": 3 },
+        "bridge": { "start": { "x": 74, "y": 86 }, "end": { "x": 85, "y": 86 }, "radius": 8 },
+        "blendRadius": 8,
+        "targetMix": 0,
+        "cornerSharpness": 0
+      }
+    },
+    {
+      "at": 0.4,
+      "easing": "smoothStep",
+      "frame": {
+        "anchor": { "x": 79.495, "y": 24 },
+        "leftLeg": { "start": { "x": 79.495, "y": 24 }, "end": { "x": 59, "y": 119 }, "radius": 20.5 },
+        "rightLeg": { "start": { "x": 79.495, "y": 24 }, "end": { "x": 100, "y": 119 }, "radius": 20.5 },
+        "crossbar": { "start": { "x": 65, "y": 75 }, "end": { "x": 94, "y": 75 }, "radius": 5.5 },
+        "bridge": { "start": { "x": 68, "y": 95 }, "end": { "x": 91, "y": 95 }, "radius": 8 },
+        "blendRadius": 10,
+        "targetMix": 0,
+        "cornerSharpness": 0.05
+      }
+    },
+    {
+      "at": 0.6,
+      "easing": "smootherStep",
+      "frame": {
+        "anchor": { "x": 79.495, "y": 20 },
+        "leftLeg": { "start": { "x": 79.495, "y": 20 }, "end": { "x": 38, "y": 132 }, "radius": 17.5 },
+        "rightLeg": { "start": { "x": 79.495, "y": 20 }, "end": { "x": 121, "y": 132 }, "radius": 17.5 },
+        "crossbar": { "start": { "x": 58, "y": 82 }, "end": { "x": 101, "y": 82 }, "radius": 6.5 },
+        "bridge": { "start": { "x": 65, "y": 97 }, "end": { "x": 94, "y": 97 }, "radius": 5.5 },
+        "blendRadius": 8,
+        "targetMix": 0.02,
+        "cornerSharpness": 0.12
+      }
+    },
+    {
+      "at": 0.719999,
+      "easing": "easeOutCubic",
+      "frame": {
+        "anchor": { "x": 79.495, "y": 17 },
+        "leftLeg": { "start": { "x": 79.495, "y": 17 }, "end": { "x": 28, "y": 135 }, "radius": 16 },
+        "rightLeg": { "start": { "x": 79.495, "y": 17 }, "end": { "x": 131, "y": 135 }, "radius": 16 },
+        "crossbar": { "start": { "x": 53, "y": 87 }, "end": { "x": 106, "y": 87 }, "radius": 6.5 },
+        "bridge": { "start": { "x": 58, "y": 99 }, "end": { "x": 101, "y": 99 }, "radius": 2 },
+        "blendRadius": 4,
+        "targetMix": 0.12,
+        "cornerSharpness": 0.25
+      }
+    },
+    {
+      "at": 0.72,
+      "easing": "linear",
+      "frame": {
+        "anchor": { "x": 79.495, "y": 17 },
+        "leftLeg": { "start": { "x": 79.495, "y": 17 }, "end": { "x": 28, "y": 135 }, "radius": 16 },
+        "rightLeg": { "start": { "x": 79.495, "y": 17 }, "end": { "x": 131, "y": 135 }, "radius": 16 },
+        "crossbar": { "start": { "x": 53, "y": 87 }, "end": { "x": 106, "y": 87 }, "radius": 6.5 },
+        "bridge": { "start": { "x": 79.495, "y": 99 }, "end": { "x": 79.495, "y": 99 }, "radius": 0 },
+        "blendRadius": 3,
+        "targetMix": 0.12,
+        "cornerSharpness": 0.25
+      }
+    },
+    {
+      "at": 0.75,
+      "easing": "easeOutCubic",
+      "frame": {
+        "anchor": { "x": 79.495, "y": 14 },
+        "leftLeg": { "start": { "x": 79.495, "y": 14 }, "end": { "x": 24, "y": 137 }, "radius": 15 },
+        "rightLeg": { "start": { "x": 79.495, "y": 14 }, "end": { "x": 135, "y": 137 }, "radius": 15 },
+        "crossbar": { "start": { "x": 52, "y": 89 }, "end": { "x": 107, "y": 89 }, "radius": 6 },
+        "bridge": { "start": { "x": 79.495, "y": 99 }, "end": { "x": 79.495, "y": 99 }, "radius": 0 },
+        "blendRadius": 2,
+        "targetMix": 0.22,
+        "cornerSharpness": 0.4
+      }
+    },
+    {
+      "at": 0.9,
+      "easing": "smoothStep",
+      "frame": {
+        "anchor": { "x": 79.495, "y": 10 },
+        "leftLeg": { "start": { "x": 79.495, "y": 10 }, "end": { "x": 18, "y": 140 }, "radius": 13.5 },
+        "rightLeg": { "start": { "x": 79.495, "y": 10 }, "end": { "x": 141, "y": 140 }, "radius": 13.5 },
+        "crossbar": { "start": { "x": 52, "y": 90 }, "end": { "x": 107, "y": 90 }, "radius": 5.5 },
+        "bridge": { "start": { "x": 79.495, "y": 99 }, "end": { "x": 79.495, "y": 99 }, "radius": 0 },
+        "blendRadius": 0.75,
+        "targetMix": 0.82,
+        "cornerSharpness": 0.85
+      }
+    },
+    {
+      "at": 0.98,
+      "easing": "smootherStep",
+      "frame": {
+        "anchor": { "x": 79.495, "y": 0 },
+        "leftLeg": { "start": { "x": 79.495, "y": 10 }, "end": { "x": 16, "y": 140 }, "radius": 12 },
+        "rightLeg": { "start": { "x": 79.495, "y": 10 }, "end": { "x": 143, "y": 140 }, "radius": 12 },
+        "crossbar": { "start": { "x": 53.4403, "y": 96 }, "end": { "x": 102.89, "y": 96 }, "radius": 4 },
+        "bridge": { "start": { "x": 79.495, "y": 99 }, "end": { "x": 79.495, "y": 99 }, "radius": 0 },
+        "blendRadius": 0,
+        "targetMix": 1,
+        "cornerSharpness": 1
+      }
+    },
+    {
+      "at": 1,
+      "easing": "linear",
+      "frame": {
+        "anchor": { "x": 79.495, "y": 0 },
+        "leftLeg": { "start": { "x": 79.495, "y": 10 }, "end": { "x": 16, "y": 140 }, "radius": 12 },
+        "rightLeg": { "start": { "x": 79.495, "y": 10 }, "end": { "x": 143, "y": 140 }, "radius": 12 },
+        "crossbar": { "start": { "x": 53.4403, "y": 96 }, "end": { "x": 102.89, "y": 96 }, "radius": 4 },
+        "bridge": { "start": { "x": 79.495, "y": 99 }, "end": { "x": 79.495, "y": 99 }, "radius": 0 },
+        "blendRadius": 0,
+        "targetMix": 1,
+        "cornerSharpness": 1
+      }
+    }
+  ],
+  "reducedMotion": {
+    "mode": "crossfade",
+    "durationMs": 160,
+    "fadeStart": 0.15,
+    "fadeEnd": 0.85
+  }
+}

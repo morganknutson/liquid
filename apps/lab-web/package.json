@@ -1,0 +1,19 @@
+{
+  "name": "@liquid/lab-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite --host 127.0.0.1"
+  },
+  "dependencies": {
+    "@liquid/addy-logo": "0.1.0",
+    "@liquid/author": "0.1.0",
+    "@liquid/core": "0.1.0",
+    "@liquid/web": "0.1.0"
+  },
+  "devDependencies": {
+    "vite": "^8.1.5"
+  }
+}

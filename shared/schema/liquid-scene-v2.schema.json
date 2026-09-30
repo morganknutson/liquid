@@ -1,0 +1,291 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://addy.dev/liquid/schema/liquid-scene.v2.json",
+  "title": "Liquid Scene v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "fixtureVersion",
+    "durationMs",
+    "coordinateSpace",
+    "fillRule",
+    "tracks",
+    "reducedMotion"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 2 },
+    "id": { "type": "string", "minLength": 1 },
+    "fixtureVersion": { "type": "integer", "minimum": 1 },
+    "durationMs": { "type": "number", "exclusiveMinimum": 0 },
+    "coordinateSpace": { "$ref": "#/$defs/size" },
+    "fillRule": { "enum": ["nonzero", "evenodd"] },
+    "tracks": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/track" }
+    },
+    "backdrop": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/endpoint" }
+    },
+    "clip": { "$ref": "#/$defs/endpoint" },
+    "loop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start"],
+      "properties": { "start": { "type": "number", "minimum": 0, "exclusiveMaximum": 1 } }
+    },
+    "reducedMotion": { "$ref": "#/$defs/reducedMotion" }
+  },
+  "$defs": {
+    "size": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height"],
+      "properties": {
+        "width": { "type": "number", "exclusiveMinimum": 0 },
+        "height": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" }
+      }
+    },
+    "transform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["translateX", "translateY", "scaleX", "scaleY"],
+      "properties": {
+        "translateX": { "type": "number" },
+        "translateY": { "type": "number" },
+        "scaleX": { "type": "number" },
+        "scaleY": { "type": "number" }
+      }
+    },
+    "command": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "values"],
+          "properties": {
+            "type": { "enum": ["M", "L"] },
+            "values": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "values"],
+          "properties": {
+            "type": { "const": "C" },
+            "values": { "type": "array", "items": { "type": "number" }, "minItems": 6, "maxItems": 6 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": { "type": { "const": "Z" } }
+        }
+      ]
+    },
+    "endpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assetId", "shapeId", "transform", "commands"],
+      "properties": {
+        "assetId": { "type": "string", "minLength": 1 },
+        "shapeId": { "type": "string", "minLength": 1 },
+        "transform": { "$ref": "#/$defs/transform" },
+        "commands": {
+          "type": "array",
+          "description": "Endpoint path commands must be ordered as M-started closed contours.",
+          "minItems": 2,
+          "items": { "$ref": "#/$defs/command" }
+        }
+      }
+    },
+    "timing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "type": "number", "minimum": 0, "maximum": 1 },
+        "end": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "componentDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "operation"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["capsule", "ribbon", "ellipse"] },
+        "operation": { "enum": ["union", "subtract"] },
+        "groupId": { "type": "string", "minLength": 1 }
+      }
+    },
+    "capsule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "start", "end", "radius"],
+      "properties": {
+        "kind": { "const": "capsule" },
+        "start": { "$ref": "#/$defs/point" },
+        "end": { "$ref": "#/$defs/point" },
+        "radius": { "type": "number", "minimum": 0 }
+      }
+    },
+    "ribbon": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "p0", "p1", "p2", "p3", "startRadius", "endRadius"],
+      "properties": {
+        "kind": { "const": "ribbon" },
+        "p0": { "$ref": "#/$defs/point" },
+        "p1": { "$ref": "#/$defs/point" },
+        "p2": { "$ref": "#/$defs/point" },
+        "p3": { "$ref": "#/$defs/point" },
+        "startRadius": { "type": "number", "minimum": 0 },
+        "endRadius": { "type": "number", "minimum": 0 }
+      }
+    },
+    "ellipse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "center", "radiusX", "radiusY"],
+      "properties": {
+        "kind": { "const": "ellipse" },
+        "center": { "$ref": "#/$defs/point" },
+        "radiusX": { "type": "number", "minimum": 0 },
+        "radiusY": { "type": "number", "minimum": 0 },
+        "rotation": { "type": "number" }
+      }
+    },
+    "componentState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "primitive"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "primitive": {
+          "oneOf": [
+            { "$ref": "#/$defs/capsule" },
+            { "$ref": "#/$defs/ribbon" },
+            { "$ref": "#/$defs/ellipse" }
+          ]
+        }
+      }
+    },
+    "materialValues": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["number", "string", "boolean"]
+      }
+    },
+    "materialMap": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/materialValues" }
+    },
+    "keyframe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["at", "easing", "components"],
+      "properties": {
+        "at": { "type": "number", "minimum": 0, "maximum": 1 },
+        "easing": {
+          "enum": ["linear", "smoothStep", "smootherStep", "easeInCubic", "easeOutCubic"]
+        },
+        "components": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/componentState" }
+        },
+        "material": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "components": { "$ref": "#/$defs/materialMap" },
+            "groups": { "$ref": "#/$defs/materialMap" }
+          }
+        }
+      }
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "at"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["step", "release"] },
+        "at": { "type": "number", "minimum": 0, "maximum": 1 },
+        "end": { "type": "number", "minimum": 0, "maximum": 1 },
+        "componentId": { "type": "string", "minLength": 1 },
+        "payload": { "$ref": "#/$defs/materialValues" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "kind": { "const": "release" } },
+            "required": ["kind"]
+          },
+          "then": { "required": ["end"] }
+        },
+        {
+          "if": {
+            "properties": { "kind": { "const": "step" } },
+            "required": ["kind"]
+          },
+          "then": { "not": { "required": ["end"] } }
+        }
+      ]
+    },
+    "track": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "source", "target", "timing", "components", "keyframes"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "source": { "$ref": "#/$defs/endpoint" },
+        "target": { "$ref": "#/$defs/endpoint" },
+        "timing": { "$ref": "#/$defs/timing" },
+        "interpolation": { "enum": ["keyframeEasing", "monotoneCubic"] },
+        "components": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/componentDefinition" }
+        },
+        "keyframes": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "$ref": "#/$defs/keyframe" }
+        },
+        "events": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/event" }
+        }
+      }
+    },
+    "reducedMotion": {
+      "type": "object",
+      "description": "For crossfade reduced motion, fadeStart must be less than fadeEnd.",
+      "additionalProperties": false,
+      "required": ["mode", "durationMs", "fadeStart", "fadeEnd"],
+      "properties": {
+        "mode": { "const": "crossfade" },
+        "durationMs": { "type": "number", "exclusiveMinimum": 0 },
+        "fadeStart": { "type": "number", "minimum": 0, "maximum": 1 },
+        "fadeEnd": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  }
+}

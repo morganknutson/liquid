@@ -1,0 +1,10 @@
+.claude/settings.local.json
+.build/
+.swiftpm/
+DerivedData/
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+.DS_Store

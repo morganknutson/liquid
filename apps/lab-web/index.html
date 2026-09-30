@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Liquid A Lab</title>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="stage">
+        <canvas id="liquid-canvas" width="960" height="720" aria-label="Liquid capsule to A animation"></canvas>
+      </section>
+      <aside class="panel">
+        <details class="status">
+          <summary>Playback status</summary>
+          <div class="status-content">
+            <span id="phase">sourceHold</span>
+            <span id="time">0 ms</span>
+          </div>
+        </details>
+        <label>
+          <span>Scene</span>
+          <select id="scene-select" aria-label="Scene">
+            <option value="v1">Capsule to A</option>
+            <option value="v2">Spinner to Addy</option>
+            <option value="ad-study">Spinner to A+d study</option>
+          </select>
+        </label>
+        <div class="transport" aria-label="Playback controls">
+          <button id="play" type="button" aria-label="Play or pause">Pause</button>
+          <button id="restart" type="button" aria-label="Restart">Restart</button>
+        </div>
+        <label>
+          <span>Progress</span>
+          <input id="scrub" type="range" min="0" max="1" value="0" step="0.0001" />
+        </label>
+        <label>
+          <span>Speed</span>
+          <input id="speed" type="range" min="0.25" max="1.75" value="1" step="0.05" />
+        </label>
+        <section class="tuning" aria-labelledby="tuning-title">
+          <div class="tuning-header">
+            <h2 id="tuning-title">Authoring</h2>
+            <button id="reset-tuning" type="button">Reset</button>
+          </div>
+          <div id="v1-authoring-controls" class="author-version">
+            <label>
+              <span>Leg separation <output id="leg-separation-value" for="leg-separation">+0.0</output></span>
+              <input id="leg-separation" type="range" min="-16" max="18" value="0" step="0.5" />
+            </label>
+            <label>
+              <span>Goo strength <output id="goo-strength-value" for="goo-strength">1.00x</output></span>
+              <input id="goo-strength" type="range" min="0.2" max="1.8" value="1" step="0.05" />
+            </label>
+            <label>
+              <span>Bridge thickness <output id="bridge-thickness-value" for="bridge-thickness">1.00x</output></span>
+              <input id="bridge-thickness" type="range" min="0" max="1.9" value="1" step="0.05" />
+            </label>
+            <label>
+              <span>Crossbar thickness <output id="crossbar-thickness-value" for="crossbar-thickness">1.00x</output></span>
+              <input id="crossbar-thickness" type="range" min="0.35" max="1.8" value="1" step="0.05" />
+            </label>
+            <label>
+              <span>Target bias <output id="target-bias-value" for="target-bias">+0.00</output></span>
+              <input id="target-bias" type="range" min="-0.22" max="0.22" value="0" step="0.01" />
+            </label>
+          </div>
+          <div id="v2-authoring-controls" class="author-version" hidden>
+            <fieldset class="control-group">
+              <legend>Selection</legend>
+              <div class="field-grid">
+                <label>
+                  <span>Track</span>
+                  <select id="v2-track" aria-label="V2 track"></select>
+                </label>
+                <label>
+                  <span>Component</span>
+                  <select id="v2-component" aria-label="V2 component"></select>
+                </label>
+                <label>
+                  <span>Keyframe</span>
+                  <select id="v2-keyframe" aria-label="V2 keyframe"></select>
+                </label>
+              </div>
+            </fieldset>
+            <details class="context-details">
+              <summary>Selection details</summary>
+              <div class="context-grid">
+                <span id="v2-track-context" data-testid="v2-track-context"></span>
+                <span id="v2-component-context" data-testid="v2-component-context"></span>
+                <span id="v2-keyframe-context" data-testid="v2-keyframe-context"></span>
+              </div>
+            </details>
+            <p id="v2-edit-error" class="edit-error" role="alert" hidden></p>
+            <fieldset class="control-group">
+              <legend>Primitive</legend>
+              <div id="v2-primitive-fields" class="primitive-fields"></div>
+            </fieldset>
+            <fieldset class="control-group">
+              <legend>Keyframe local timing</legend>
+              <div class="field-grid pair-grid">
+                <label>
+                  <span>At</span>
+                  <input id="v2-keyframe-at" type="number" min="0" max="1" step="0.000001" inputmode="decimal" />
+                </label>
+                <label>
+                  <span>Easing</span>
+                  <select id="v2-keyframe-easing" aria-label="V2 keyframe easing"></select>
+                </label>
+              </div>
+            </fieldset>
+            <fieldset class="control-group">
+              <legend>Component definition</legend>
+              <div class="field-grid">
+                <label>
+                  <span>Kind</span>
+                  <input id="v2-component-kind" type="text" readonly />
+                </label>
+                <label>
+                  <span>Operation</span>
+                  <select id="v2-component-operation" aria-label="V2 component operation">
+                    <option value="union">union</option>
+                    <option value="subtract">subtract</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Group</span>
+                  <input id="v2-component-group" type="text" autocomplete="off" />
+                </label>
+              </div>
+            </fieldset>
+            <fieldset class="control-group">
+              <legend>Material scope</legend>
+              <label>
+                <span>Scope</span>
+                <select id="v2-material-scope" aria-label="V2 material scope"></select>
+              </label>
+              <p id="v2-material-track-note" class="control-note">Target and Corners are track-only; Blend is editable for track, group, and component scopes.</p>
+              <div class="field-grid">
+                <label>
+                  <span>Blend</span>
+                  <input id="v2-material-blend-radius" type="number" min="0" step="0.05" inputmode="decimal" />
+                </label>
+                <label>
+                  <span>Target</span>
+                  <input id="v2-material-target-mix" type="number" min="0" max="1" step="0.01" inputmode="decimal" aria-describedby="v2-material-track-note" />
+                </label>
+                <label>
+                  <span>Corners</span>
+                  <input id="v2-material-corner-sharpness" type="number" min="0" max="1" step="0.01" inputmode="decimal" aria-describedby="v2-material-track-note" />
+                </label>
+              </div>
+            </fieldset>
+            <fieldset class="control-group">
+              <legend>Track global timing</legend>
+              <div class="field-grid pair-grid">
+                <label>
+                  <span>Start</span>
+                  <input id="v2-track-start" type="number" min="0" max="1" step="0.000001" inputmode="decimal" />
+                </label>
+                <label>
+                  <span>End</span>
+                  <input id="v2-track-end" type="number" min="0" max="1" step="0.000001" inputmode="decimal" />
+                </label>
+              </div>
+            </fieldset>
+            <fieldset class="control-group">
+              <legend>Semantic event local timing</legend>
+              <label>
+                <span>Event</span>
+                <select id="v2-event" aria-label="V2 semantic event"></select>
+              </label>
+              <div class="field-grid pair-grid">
+                <label>
+                  <span>At</span>
+                  <input id="v2-event-at" type="number" min="0" max="1" step="0.000001" inputmode="decimal" />
+                </label>
+                <label id="v2-event-end-label">
+                  <span>End</span>
+                  <input id="v2-event-end" type="number" min="0" max="1" step="0.000001" inputmode="decimal" />
+                </label>
+              </div>
+            </fieldset>
+            <fieldset class="control-group">
+              <legend>Scene timing</legend>
+              <div class="field-grid">
+                <label>
+                  <span>Duration ms</span>
+                  <input id="v2-scene-duration" type="number" min="1" step="1" inputmode="numeric" />
+                </label>
+                <label>
+                  <span>Reduced ms</span>
+                  <input id="v2-reduced-duration" type="number" min="1" step="1" inputmode="numeric" />
+                </label>
+                <label>
+                  <span>Fade start</span>
+                  <input id="v2-reduced-fade-start" type="number" min="0" max="1" step="0.000001" inputmode="decimal" />
+                </label>
+                <label>
+                  <span>Fade end</span>
+                  <input id="v2-reduced-fade-end" type="number" min="0" max="1" step="0.000001" inputmode="decimal" />
+                </label>
+              </div>
+            </fieldset>
+            <fieldset class="control-group">
+              <legend>Preview</legend>
+              <div class="toggles compact-toggles">
+                <label><input id="v2-solo-track" type="checkbox" /> Solo selected track</label>
+                <label><input id="v2-target-overlay" type="checkbox" /> Exact target overlay</label>
+              </div>
+            </fieldset>
+            <button id="v2-upsert-keyframe" type="button">Upsert local</button>
+          </div>
+          <div class="author-actions" aria-label="Authoring document actions">
+            <button id="insert-current" type="button">Insert</button>
+            <button id="commit-scene" type="button">Commit</button>
+            <button id="reset-committed" type="button">Revert</button>
+          </div>
+          <label>
+            <span>Snapshot</span>
+            <input id="snapshot-name" type="text" value="draft" autocomplete="off" />
+          </label>
+          <div class="author-actions" aria-label="Snapshot and export actions">
+            <button id="save-snapshot" type="button">Save</button>
+            <button id="export-json" type="button">Export</button>
+            <button id="copy-json" type="button">Copy</button>
+          </div>
+        </section>
+        <div class="toggles">
+          <label><input id="debug" type="checkbox" /> Debug</label>
+          <label><input id="reduced" type="checkbox" /> Reduced motion</label>
+        </div>
+        <details class="diagnostics">
+          <summary>Live diagnostics</summary>
+          <dl>
+            <div><dt>Events</dt><dd id="events">none</dd></div>
+            <div><dt>Target mix</dt><dd id="mix">0.000000</dd></div>
+            <div><dt>Bridge</dt><dd id="bridge">0.000000</dd></div>
+            <div><dt>Document</dt><dd id="dirty">clean</dd></div>
+            <div><dt>Diff</dt><dd id="diff">none</dd></div>
+            <div><dt>Snapshots</dt><dd id="snapshots">none</dd></div>
+          </dl>
+        </details>
+        <textarea id="export-output" readonly aria-label="Canonical scene JSON"></textarea>
+      </aside>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

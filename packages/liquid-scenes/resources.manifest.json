@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "resourceVersion": 1,
+  "generatedBy": "tools/sync-scene-resources.mjs",
+  "targets": [
+    {
+      "id": "npm",
+      "root": "packages/liquid-scenes"
+    },
+    {
+      "id": "swift",
+      "root": "Sources/LiquidScenes/Resources"
+    }
+  ],
+  "files": [
+    {
+      "kind": "scene",
+      "id": "capsule-to-a",
+      "source": "shared/scenes/capsule-to-a.v1.json",
+      "output": "scenes/capsule-to-a.v1.json",
+      "byteLength": 8780,
+      "sha256": "0308abc58a754a589ee37fa608bb0ce9f5aedd44f9678d4b4c016268e19a5074"
+    },
+    {
+      "kind": "scene",
+      "id": "spinner-to-ad",
+      "source": "shared/scenes/spinner-to-ad.v2.json",
+      "output": "scenes/spinner-to-ad.v2.json",
+      "byteLength": 46674,
+      "sha256": "7b1aade76998b81f5d9c66d46350c984911a1c39fdce402ca1203ffe69563c32"
+    },
+    {
+      "kind": "scene",
+      "id": "spinner-to-addy",
+      "source": "shared/scenes/spinner-to-addy.v2.json",
+      "output": "scenes/spinner-to-addy.v2.json",
+      "byteLength": 431507,
+      "sha256": "a1afe859a55cc35576b388b3569e29435fd4711411219d5b63ec36e343feb8d1"
+    },
+    {
+      "kind": "scene",
+      "id": "addy-logo-wave",
+      "source": "shared/scenes/addy-logo-wave.v2.json",
+      "output": "scenes/addy-logo-wave.v2.json",
+      "byteLength": 463630,
+      "sha256": "5558c06a62bb05bada18647641f6f4769fed4ec410b8ccb803e3affa24e3efe8"
+    },
+    {
+      "kind": "scene",
+      "id": "addy-logo-wave-wordmark",
+      "source": "shared/scenes/addy-logo-wave-wordmark.v2.json",
+      "output": "scenes/addy-logo-wave-wordmark.v2.json",
+      "byteLength": 1218067,
+      "sha256": "994d84c6552e29718701c9bf8ec2ee86db0cf2e1930eb7443d83c5cdafeae4fc"
+    },
+    {
+      "kind": "sampleManifest",
+      "id": "capsule-to-a",
+      "source": "shared/golden/capsule-to-a.samples.json",
+      "output": "samples/capsule-to-a.samples.json",
+      "byteLength": 704,
+      "sha256": "81ffe7662b89171fbf4ed71b22a6671cd5ce8232fb42aaf19d016e9439b87285"
+    },
+    {
+      "kind": "sampleManifest",
+      "id": "spinner-to-ad",
+      "source": "shared/golden/spinner-to-ad.samples.json",
+      "output": "samples/spinner-to-ad.samples.json",
+      "byteLength": 604,
+      "sha256": "4e9b24b739a5883c842ab36556b478799e13241a07efa9337aa113f3e584a6f5"
+    },
+    {
+      "kind": "sampleManifest",
+      "id": "spinner-to-addy",
+      "source": "shared/golden/spinner-to-addy.samples.json",
+      "output": "samples/spinner-to-addy.samples.json",
+      "byteLength": 730,
+      "sha256": "cbae3901a5252be4373f811d6bee16cb430bdaf1a915e978fb4252f8938bc1c9"
+    },
+    {
+      "kind": "sampleManifest",
+      "id": "addy-logo-wave",
+      "source": "shared/golden/addy-logo-wave.samples.json",
+      "output": "samples/addy-logo-wave.samples.json",
+      "byteLength": 745,
+      "sha256": "0961a1ae412520b06ece36f7b4a7d578fd038f2d59108f4c8d4e5e646e566189"
+    },
+    {
+      "kind": "sampleManifest",
+      "id": "addy-logo-wave-wordmark",
+      "source": "shared/golden/addy-logo-wave-wordmark.samples.json",
+      "output": "samples/addy-logo-wave-wordmark.samples.json",
+      "byteLength": 683,
+      "sha256": "1cd7461efd84e84355a06bbb0926e801eee0c3eb384f763ff53ace994dd7e8ce"
+    },
+    {
+      "kind": "assetManifest",
+      "id": "assets",
+      "source": "shared/assets/manifest.json",
+      "output": "assets/manifest.json",
+      "byteLength": 94512,
+      "sha256": "89968a9f932da7d85f9cc72cfa7a3b1199c6f27ab45b62160acc465f57a3910b"
+    },
+    {
+      "kind": "asset",
+      "id": "addy-a",
+      "source": "shared/assets/addy-a.svg",
+      "output": "assets/addy-a.svg",
+      "byteLength": 284,
+      "sha256": "96887fa82765c7dadf326aae6d37fcb91065585ebae355b4a884e888d292ee4f"
+    },
+    {
+      "kind": "asset",
+      "id": "addy-spinner",
+      "source": "shared/assets/addy-spinner.svg",
+      "output": "assets/addy-spinner.svg",
+      "byteLength": 1001,
+      "sha256": "89cd352a1bf3deaeede2ad98b678469182884c0235d6b55e493b96fdd2b4949e"
+    },
+    {
+      "kind": "asset",
+      "id": "addy-wordmark",
+      "source": "shared/assets/addy-wordmark.svg",
+      "output": "assets/addy-wordmark.svg",
+      "byteLength": 1902,
+      "sha256": "693d48d65b7dcb86390f78632f8ca6c12b362e4e9286eb35068a274356bd8b44"
+    },
+    {
+      "kind": "asset",
+      "id": "addy-logo-ticks",
+      "source": "shared/assets/addy-logo-ticks.svg",
+      "output": "assets/addy-logo-ticks.svg",
+      "byteLength": 526,
+      "sha256": "6a69c937d8c6bfdafa3828f159a9d070a15ca9cffae3fb655e010c31e2ec13bf"
+    },
+    {
+      "kind": "asset",
+      "id": "addy-logo-wordmark",
+      "source": "shared/assets/addy-logo-wordmark.svg",
+      "output": "assets/addy-logo-wordmark.svg",
+      "byteLength": 2010,
+      "sha256": "d00c94fdce5ec2eaf4fb509e88be8727f70ba4bae69e2fce301fdedbcb876264"
+    }
+  ]
+}

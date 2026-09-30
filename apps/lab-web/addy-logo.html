@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Addy logo</title>
+    <style>
+      :root { font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif; }
+      body { margin: 0; background: #101014; color: #f8fafc; }
+      main { display: grid; gap: 48px; max-width: 960px; margin: 0 auto; padding: 64px 24px; }
+      .hero addy-logo { width: min(100%, 720px); margin: 0 auto; }
+      .light { background: #f8fafc; color: #101014; border-radius: 16px; padding: 32px; }
+      .light addy-logo { width: 240px; }
+      .inline { display: flex; align-items: center; gap: 12px; font-size: 18px; }
+      .inline addy-logo { width: 96px; }
+      button { font: inherit; padding: 8px 14px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.2); background: #27272f; color: inherit; cursor: pointer; }
+      addy-logo img { display: block; width: 100%; height: auto; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <addy-logo id="hero" label="Addy">
+          <img data-fallback alt="Addy" />
+        </addy-logo>
+      </section>
+      <div><button id="replay" type="button">Replay</button> <span id="status">waiting</span></div>
+      <section class="hero">
+        <addy-logo id="wave" variant="wave" label="Addy is working">
+          <img data-fallback alt="Addy" />
+        </addy-logo>
+      </section>
+      <div><button id="wave-toggle" type="button">Pause wave</button> <button id="wave-replay" type="button">Replay wave</button></div>
+      <section class="hero">
+        <addy-logo id="wave-wordmark" variant="wave-wordmark">
+          <img data-fallback alt="Addy" />
+        </addy-logo>
+      </section>
+      <div><button id="wave-wordmark-replay" type="button">Replay wave then wordmark</button> <span id="wave-wordmark-status">waiting</span></div>
+      <section class="light">
+        <addy-logo id="light" autoplay="immediate">
+          <img data-fallback alt="Addy" />
+        </addy-logo>
+      </section>
+      <p class="inline"><addy-logo id="inline" color="#a7f3d0" autoplay="immediate"><img data-fallback alt="Addy" /></addy-logo> works inline too.</p>
+    </main>
+    <script type="module" src="/src/addy-logo.ts"></script>
+  </body>
+</html>

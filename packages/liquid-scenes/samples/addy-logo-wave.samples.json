@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "sceneId": "addy-logo-wave",
+  "samples": [
+    {
+      "label": "empty-pill",
+      "progress": 0
+    },
+    {
+      "label": "ticks-falling",
+      "progress": 0.043
+    },
+    {
+      "label": "ticks-bouncing",
+      "progress": 0.107
+    },
+    {
+      "label": "wave-rest",
+      "progress": 0.197
+    },
+    {
+      "label": "first-step-overshoot",
+      "progress": 0.297
+    },
+    {
+      "label": "loop-start",
+      "progress": 0.358
+    },
+    {
+      "label": "pill-exiting",
+      "progress": 0.488
+    },
+    {
+      "label": "pill-entering",
+      "progress": 0.693
+    },
+    {
+      "label": "late-loop",
+      "progress": 0.962
+    },
+    {
+      "label": "loop-end",
+      "progress": 1
+    }
+  ]
+}

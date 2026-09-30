@@ -1,0 +1,1979 @@
+{
+  "$schema": "../schema/liquid-scene-v2.schema.json",
+  "schemaVersion": 2,
+  "id": "spinner-to-ad",
+  "fixtureVersion": 1,
+  "durationMs": 1900,
+  "coordinateSpace": {
+    "width": 528,
+    "height": 207
+  },
+  "fillRule": "nonzero",
+  "tracks": [
+    {
+      "id": "spinner-left-to-a",
+      "source": {
+        "assetId": "addy-spinner",
+        "shapeId": "bar-left",
+        "transform": {
+          "translateX": 52.3954,
+          "translateY": -12.4297,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        "commands": [
+          {
+            "type": "M",
+            "values": [
+              27.0996,
+              22.8516
+            ]
+          },
+          {
+            "type": "C",
+            "values": [
+              42.0663,
+              22.8516,
+              54.1992,
+              34.9845,
+              54.1992,
+              49.9512
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              54.1992,
+              104.15
+            ]
+          },
+          {
+            "type": "C",
+            "values": [
+              54.1992,
+              119.117,
+              42.0664,
+              131.251,
+              27.0996,
+              131.251
+            ]
+          },
+          {
+            "type": "C",
+            "values": [
+              12.1329,
+              131.251,
+              0,
+              119.117,
+              0,
+              104.15
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              0,
+              49.9512
+            ]
+          },
+          {
+            "type": "C",
+            "values": [
+              0.000049,
+              34.9845,
+              12.1329,
+              22.8516,
+              27.0996,
+              22.8516
+            ]
+          },
+          {
+            "type": "Z"
+          }
+        ]
+      },
+      "target": {
+        "assetId": "addy-wordmark",
+        "shapeId": "letter-a",
+        "transform": {
+          "translateX": 0,
+          "translateY": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        "commands": [
+          {
+            "type": "M",
+            "values": [
+              0,
+              161.43
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              56.1013,
+              10.4219
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              103.111,
+              10.4219
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              158.991,
+              161.43
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              111.094,
+              161.43
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              102.89,
+              134.377
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              53.4403,
+              134.377
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              44.5706,
+              161.43
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              0,
+              161.43
+            ]
+          },
+          {
+            "type": "Z"
+          },
+          {
+            "type": "M",
+            "values": [
+              64.971,
+              99.5631
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              92.4673,
+              99.5631
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              79.3844,
+              56.1012
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              64.971,
+              99.5631
+            ]
+          },
+          {
+            "type": "Z"
+          }
+        ]
+      },
+      "timing": {
+        "start": 0,
+        "end": 0.78
+      },
+      "components": [
+        {
+          "id": "a-left-leg",
+          "kind": "capsule",
+          "operation": "union",
+          "groupId": "a-body"
+        },
+        {
+          "id": "a-right-leg",
+          "kind": "capsule",
+          "operation": "union",
+          "groupId": "a-body"
+        },
+        {
+          "id": "a-crossbar",
+          "kind": "capsule",
+          "operation": "union",
+          "groupId": "a-crossbar"
+        },
+        {
+          "id": "a-adhesion",
+          "kind": "ribbon",
+          "operation": "union",
+          "groupId": "a-bridge"
+        }
+      ],
+      "keyframes": [
+        {
+          "at": 0,
+          "easing": "linear",
+          "components": [
+            {
+              "id": "a-left-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 37.5215
+                },
+                "end": {
+                  "x": 79.495,
+                  "y": 91.7217
+                },
+                "radius": 27.0996
+              }
+            },
+            {
+              "id": "a-right-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 37.5215
+                },
+                "end": {
+                  "x": 79.495,
+                  "y": 91.7217
+                },
+                "radius": 27.0996
+              }
+            },
+            {
+              "id": "a-crossbar",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 80.4219
+                },
+                "end": {
+                  "x": 79.495,
+                  "y": 80.4219
+                },
+                "radius": 0
+              }
+            },
+            {
+              "id": "a-adhesion",
+              "primitive": {
+                "kind": "ribbon",
+                "p0": {
+                  "x": 79.495,
+                  "y": 98.4219
+                },
+                "p1": {
+                  "x": 79.495,
+                  "y": 98.4219
+                },
+                "p2": {
+                  "x": 79.495,
+                  "y": 98.4219
+                },
+                "p3": {
+                  "x": 79.495,
+                  "y": 98.4219
+                },
+                "startRadius": 0,
+                "endRadius": 0
+              }
+            }
+          ],
+          "material": {
+            "groups": {
+              "$track": {
+                "targetMix": 0,
+                "cornerSharpness": 0,
+                "blendRadius": 0
+              },
+              "a-body": {
+                "blendRadius": 0
+              },
+              "a-crossbar": {
+                "blendRadius": 0
+              },
+              "a-bridge": {
+                "blendRadius": 0
+              }
+            }
+          }
+        },
+        {
+          "at": 0.2,
+          "easing": "smoothStep",
+          "components": [
+            {
+              "id": "a-left-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 36.4219
+                },
+                "end": {
+                  "x": 76,
+                  "y": 101.4219
+                },
+                "radius": 24.5
+              }
+            },
+            {
+              "id": "a-right-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 36.4219
+                },
+                "end": {
+                  "x": 83,
+                  "y": 101.4219
+                },
+                "radius": 24.5
+              }
+            },
+            {
+              "id": "a-crossbar",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 74,
+                  "y": 80.4219
+                },
+                "end": {
+                  "x": 85,
+                  "y": 80.4219
+                },
+                "radius": 3
+              }
+            },
+            {
+              "id": "a-adhesion",
+              "primitive": {
+                "kind": "ribbon",
+                "p0": {
+                  "x": 74,
+                  "y": 96.4219
+                },
+                "p1": {
+                  "x": 77,
+                  "y": 94.4219
+                },
+                "p2": {
+                  "x": 82,
+                  "y": 94.4219
+                },
+                "p3": {
+                  "x": 85,
+                  "y": 96.4219
+                },
+                "startRadius": 8,
+                "endRadius": 8
+              }
+            }
+          ],
+          "material": {
+            "groups": {
+              "$track": {
+                "targetMix": 0,
+                "cornerSharpness": 0,
+                "blendRadius": 8
+              },
+              "a-body": {
+                "blendRadius": 8
+              },
+              "a-crossbar": {
+                "blendRadius": 4.4
+              },
+              "a-bridge": {
+                "blendRadius": 6
+              }
+            }
+          }
+        },
+        {
+          "at": 0.4,
+          "easing": "smoothStep",
+          "components": [
+            {
+              "id": "a-left-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 34.4219
+                },
+                "end": {
+                  "x": 59,
+                  "y": 129.4219
+                },
+                "radius": 20.5
+              }
+            },
+            {
+              "id": "a-right-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 34.4219
+                },
+                "end": {
+                  "x": 100,
+                  "y": 129.4219
+                },
+                "radius": 20.5
+              }
+            },
+            {
+              "id": "a-crossbar",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 65,
+                  "y": 85.4219
+                },
+                "end": {
+                  "x": 94,
+                  "y": 85.4219
+                },
+                "radius": 5.5
+              }
+            },
+            {
+              "id": "a-adhesion",
+              "primitive": {
+                "kind": "ribbon",
+                "p0": {
+                  "x": 68,
+                  "y": 105.4219
+                },
+                "p1": {
+                  "x": 73,
+                  "y": 102.4219
+                },
+                "p2": {
+                  "x": 86,
+                  "y": 102.4219
+                },
+                "p3": {
+                  "x": 91,
+                  "y": 105.4219
+                },
+                "startRadius": 8,
+                "endRadius": 8
+              }
+            }
+          ],
+          "material": {
+            "groups": {
+              "$track": {
+                "targetMix": 0,
+                "cornerSharpness": 0.05,
+                "blendRadius": 10
+              },
+              "a-body": {
+                "blendRadius": 10
+              },
+              "a-crossbar": {
+                "blendRadius": 5.5
+              },
+              "a-bridge": {
+                "blendRadius": 7.5
+              }
+            }
+          }
+        },
+        {
+          "at": 0.6,
+          "easing": "smootherStep",
+          "components": [
+            {
+              "id": "a-left-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 30.4219
+                },
+                "end": {
+                  "x": 38,
+                  "y": 142.4219
+                },
+                "radius": 17.5
+              }
+            },
+            {
+              "id": "a-right-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 30.4219
+                },
+                "end": {
+                  "x": 121,
+                  "y": 142.4219
+                },
+                "radius": 17.5
+              }
+            },
+            {
+              "id": "a-crossbar",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 58,
+                  "y": 92.4219
+                },
+                "end": {
+                  "x": 101,
+                  "y": 92.4219
+                },
+                "radius": 6.5
+              }
+            },
+            {
+              "id": "a-adhesion",
+              "primitive": {
+                "kind": "ribbon",
+                "p0": {
+                  "x": 65,
+                  "y": 107.4219
+                },
+                "p1": {
+                  "x": 73,
+                  "y": 104.4219
+                },
+                "p2": {
+                  "x": 86,
+                  "y": 104.4219
+                },
+                "p3": {
+                  "x": 94,
+                  "y": 107.4219
+                },
+                "startRadius": 5.5,
+                "endRadius": 5.5
+              }
+            }
+          ],
+          "material": {
+            "groups": {
+              "$track": {
+                "targetMix": 0.02,
+                "cornerSharpness": 0.12,
+                "blendRadius": 8
+              },
+              "a-body": {
+                "blendRadius": 8
+              },
+              "a-crossbar": {
+                "blendRadius": 4.4
+              },
+              "a-bridge": {
+                "blendRadius": 6
+              }
+            }
+          }
+        },
+        {
+          "at": 0.719999,
+          "easing": "easeOutCubic",
+          "components": [
+            {
+              "id": "a-left-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 27.4219
+                },
+                "end": {
+                  "x": 28,
+                  "y": 145.4219
+                },
+                "radius": 16
+              }
+            },
+            {
+              "id": "a-right-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 27.4219
+                },
+                "end": {
+                  "x": 131,
+                  "y": 145.4219
+                },
+                "radius": 16
+              }
+            },
+            {
+              "id": "a-crossbar",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 53,
+                  "y": 97.4219
+                },
+                "end": {
+                  "x": 106,
+                  "y": 97.4219
+                },
+                "radius": 6.5
+              }
+            },
+            {
+              "id": "a-adhesion",
+              "primitive": {
+                "kind": "ribbon",
+                "p0": {
+                  "x": 58,
+                  "y": 109.4219
+                },
+                "p1": {
+                  "x": 68,
+                  "y": 108.4219
+                },
+                "p2": {
+                  "x": 91,
+                  "y": 108.4219
+                },
+                "p3": {
+                  "x": 101,
+                  "y": 109.4219
+                },
+                "startRadius": 2,
+                "endRadius": 2
+              }
+            }
+          ],
+          "material": {
+            "groups": {
+              "$track": {
+                "targetMix": 0.12,
+                "cornerSharpness": 0.25,
+                "blendRadius": 4
+              },
+              "a-body": {
+                "blendRadius": 4
+              },
+              "a-crossbar": {
+                "blendRadius": 2.2
+              },
+              "a-bridge": {
+                "blendRadius": 3
+              }
+            }
+          }
+        },
+        {
+          "at": 0.72,
+          "easing": "linear",
+          "components": [
+            {
+              "id": "a-left-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 27.4219
+                },
+                "end": {
+                  "x": 28,
+                  "y": 145.4219
+                },
+                "radius": 16
+              }
+            },
+            {
+              "id": "a-right-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 27.4219
+                },
+                "end": {
+                  "x": 131,
+                  "y": 145.4219
+                },
+                "radius": 16
+              }
+            },
+            {
+              "id": "a-crossbar",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 53,
+                  "y": 97.4219
+                },
+                "end": {
+                  "x": 106,
+                  "y": 97.4219
+                },
+                "radius": 6.5
+              }
+            },
+            {
+              "id": "a-adhesion",
+              "primitive": {
+                "kind": "ribbon",
+                "p0": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "p1": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "p2": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "p3": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "startRadius": 0,
+                "endRadius": 0
+              }
+            }
+          ],
+          "material": {
+            "groups": {
+              "$track": {
+                "targetMix": 0.12,
+                "cornerSharpness": 0.25,
+                "blendRadius": 3
+              },
+              "a-body": {
+                "blendRadius": 3
+              },
+              "a-crossbar": {
+                "blendRadius": 1.6500000000000001
+              },
+              "a-bridge": {
+                "blendRadius": 2.25
+              }
+            }
+          }
+        },
+        {
+          "at": 0.75,
+          "easing": "easeOutCubic",
+          "components": [
+            {
+              "id": "a-left-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 24.4219
+                },
+                "end": {
+                  "x": 24,
+                  "y": 147.4219
+                },
+                "radius": 15
+              }
+            },
+            {
+              "id": "a-right-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 24.4219
+                },
+                "end": {
+                  "x": 135,
+                  "y": 147.4219
+                },
+                "radius": 15
+              }
+            },
+            {
+              "id": "a-crossbar",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 52,
+                  "y": 99.4219
+                },
+                "end": {
+                  "x": 107,
+                  "y": 99.4219
+                },
+                "radius": 6
+              }
+            },
+            {
+              "id": "a-adhesion",
+              "primitive": {
+                "kind": "ribbon",
+                "p0": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "p1": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "p2": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "p3": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "startRadius": 0,
+                "endRadius": 0
+              }
+            }
+          ],
+          "material": {
+            "groups": {
+              "$track": {
+                "targetMix": 0.22,
+                "cornerSharpness": 0.4,
+                "blendRadius": 2
+              },
+              "a-body": {
+                "blendRadius": 2
+              },
+              "a-crossbar": {
+                "blendRadius": 1.1
+              },
+              "a-bridge": {
+                "blendRadius": 1.5
+              }
+            }
+          }
+        },
+        {
+          "at": 0.9,
+          "easing": "smoothStep",
+          "components": [
+            {
+              "id": "a-left-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 20.4219
+                },
+                "end": {
+                  "x": 18,
+                  "y": 150.4219
+                },
+                "radius": 13.5
+              }
+            },
+            {
+              "id": "a-right-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 20.4219
+                },
+                "end": {
+                  "x": 141,
+                  "y": 150.4219
+                },
+                "radius": 13.5
+              }
+            },
+            {
+              "id": "a-crossbar",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 52,
+                  "y": 100.4219
+                },
+                "end": {
+                  "x": 107,
+                  "y": 100.4219
+                },
+                "radius": 5.5
+              }
+            },
+            {
+              "id": "a-adhesion",
+              "primitive": {
+                "kind": "ribbon",
+                "p0": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "p1": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "p2": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "p3": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "startRadius": 0,
+                "endRadius": 0
+              }
+            }
+          ],
+          "material": {
+            "groups": {
+              "$track": {
+                "targetMix": 0.82,
+                "cornerSharpness": 0.85,
+                "blendRadius": 0.75
+              },
+              "a-body": {
+                "blendRadius": 0.75
+              },
+              "a-crossbar": {
+                "blendRadius": 0.41250000000000003
+              },
+              "a-bridge": {
+                "blendRadius": 0.5625
+              }
+            }
+          }
+        },
+        {
+          "at": 0.98,
+          "easing": "smootherStep",
+          "components": [
+            {
+              "id": "a-left-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 20.4219
+                },
+                "end": {
+                  "x": 16,
+                  "y": 150.4219
+                },
+                "radius": 12
+              }
+            },
+            {
+              "id": "a-right-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 20.4219
+                },
+                "end": {
+                  "x": 143,
+                  "y": 150.4219
+                },
+                "radius": 12
+              }
+            },
+            {
+              "id": "a-crossbar",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 53.4403,
+                  "y": 106.4219
+                },
+                "end": {
+                  "x": 102.89,
+                  "y": 106.4219
+                },
+                "radius": 4
+              }
+            },
+            {
+              "id": "a-adhesion",
+              "primitive": {
+                "kind": "ribbon",
+                "p0": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "p1": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "p2": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "p3": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "startRadius": 0,
+                "endRadius": 0
+              }
+            }
+          ],
+          "material": {
+            "groups": {
+              "$track": {
+                "targetMix": 1,
+                "cornerSharpness": 1,
+                "blendRadius": 0
+              },
+              "a-body": {
+                "blendRadius": 0
+              },
+              "a-crossbar": {
+                "blendRadius": 0
+              },
+              "a-bridge": {
+                "blendRadius": 0
+              }
+            }
+          }
+        },
+        {
+          "at": 1,
+          "easing": "linear",
+          "components": [
+            {
+              "id": "a-left-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 20.4219
+                },
+                "end": {
+                  "x": 16,
+                  "y": 150.4219
+                },
+                "radius": 12
+              }
+            },
+            {
+              "id": "a-right-leg",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 79.495,
+                  "y": 20.4219
+                },
+                "end": {
+                  "x": 143,
+                  "y": 150.4219
+                },
+                "radius": 12
+              }
+            },
+            {
+              "id": "a-crossbar",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 53.4403,
+                  "y": 106.4219
+                },
+                "end": {
+                  "x": 102.89,
+                  "y": 106.4219
+                },
+                "radius": 4
+              }
+            },
+            {
+              "id": "a-adhesion",
+              "primitive": {
+                "kind": "ribbon",
+                "p0": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "p1": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "p2": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "p3": {
+                  "x": 79.495,
+                  "y": 109.4219
+                },
+                "startRadius": 0,
+                "endRadius": 0
+              }
+            }
+          ],
+          "material": {
+            "groups": {
+              "$track": {
+                "targetMix": 1,
+                "cornerSharpness": 1,
+                "blendRadius": 0
+              },
+              "a-body": {
+                "blendRadius": 0
+              },
+              "a-crossbar": {
+                "blendRadius": 0
+              },
+              "a-bridge": {
+                "blendRadius": 0
+              }
+            }
+          }
+        }
+      ],
+      "events": [
+        {
+          "id": "a-top-pin",
+          "kind": "step",
+          "at": 0,
+          "componentId": "a-left-leg",
+          "payload": {
+            "intent": "pin"
+          }
+        },
+        {
+          "id": "a-crossbar-adhesion",
+          "kind": "step",
+          "at": 0.48,
+          "componentId": "a-crossbar",
+          "payload": {
+            "intent": "adhesion"
+          }
+        },
+        {
+          "id": "a-bridge-release",
+          "kind": "release",
+          "at": 0.72,
+          "end": 0.76,
+          "componentId": "a-adhesion",
+          "payload": {
+            "intent": "release"
+          }
+        },
+        {
+          "id": "a-endpoint-snap",
+          "kind": "step",
+          "at": 0.98,
+          "componentId": "a-left-leg",
+          "payload": {
+            "intent": "snap-to-target"
+          }
+        }
+      ]
+    },
+    {
+      "id": "spinner-inner-left-to-d1",
+      "source": {
+        "assetId": "addy-spinner",
+        "shapeId": "bar-inner-left",
+        "transform": {
+          "translateX": 49.37,
+          "translateY": 4.995,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        "commands": [
+          {
+            "type": "M",
+            "values": [
+              162.549,
+              0.125
+            ]
+          },
+          {
+            "type": "C",
+            "values": [
+              177.511,
+              0.12519,
+              189.64,
+              12.2547,
+              189.64,
+              27.2168
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              189.64,
+              126.884
+            ]
+          },
+          {
+            "type": "C",
+            "values": [
+              189.639,
+              141.846,
+              177.511,
+              153.974,
+              162.549,
+              153.975
+            ]
+          },
+          {
+            "type": "C",
+            "values": [
+              147.587,
+              153.975,
+              135.457,
+              141.846,
+              135.457,
+              126.884
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              135.457,
+              27.2168
+            ]
+          },
+          {
+            "type": "C",
+            "values": [
+              135.457,
+              12.2546,
+              147.587,
+              0.125,
+              162.549,
+              0.125
+            ]
+          },
+          {
+            "type": "Z"
+          }
+        ]
+      },
+      "target": {
+        "assetId": "addy-wordmark",
+        "shapeId": "letter-d1",
+        "transform": {
+          "translateX": 0,
+          "translateY": 0,
+          "scaleX": 1,
+          "scaleY": 1
+        },
+        "commands": [
+          {
+            "type": "M",
+            "values": [
+              202.605,
+              164.091
+            ]
+          },
+          {
+            "type": "C",
+            "values": [
+              173.113,
+              164.091,
+              148.056,
+              137.703,
+              148.056,
+              101.115
+            ]
+          },
+          {
+            "type": "C",
+            "values": [
+              148.056,
+              64.084,
+              171.561,
+              37.9182,
+              203.049,
+              37.9182
+            ]
+          },
+          {
+            "type": "C",
+            "values": [
+              215.466,
+              37.9182,
+              228.106,
+              42.1313,
+              235.867,
+              52.3316
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              236.31,
+              52.3316
+            ]
+          },
+          {
+            "type": "C",
+            "values": [
+              236.089,
+              46.5662,
+              236.089,
+              43.6836,
+              236.089,
+              37.0312
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              236.089,
+              0
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              275.781,
+              0
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              275.781,
+              161.43
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              236.089,
+              161.43
+            ]
+          },
+          {
+            "type": "C",
+            "values": [
+              236.089,
+              158.104,
+              236.089,
+              153.225,
+              236.31,
+              149.899
+            ]
+          },
+          {
+            "type": "L",
+            "values": [
+              235.867,
+              149.899
+            ]
+          },
+          {
+            "type": "C",
+            "values": [
+              227.884,
+              159.212,
+              216.797,
+              164.091,
+              202.605,
+              164.091
+            ]
+          },
+          {
+            "type": "Z"
+          },
+          {
+            "type": "M",
+            "values": [
+              212.362,
+              128.833
+            ]
+          },
+          {
+            "type": "C",
+            "values": [
+              226.775,
+              128.833,
+              236.754,
+              117.081,
+              236.754,
+              101.337
+            ]
+          },
+          {
+            "type": "C",
+            "values": [
+              236.754,
+              85.3714,
+              226.775,
+              74.0625,
+              212.362,
+              74.0625
+            ]
+          },
+          {
+            "type": "C",
+            "values": [
+              197.727,
+              74.0625,
+              187.527,
+              85.8149,
+              187.527,
+              101.337
+            ]
+          },
+          {
+            "type": "C",
+            "values": [
+              187.527,
+              116.859,
+              197.727,
+              128.833,
+              212.362,
+              128.833
+            ]
+          },
+          {
+            "type": "Z"
+          }
+        ]
+      },
+      "timing": {
+        "start": 0.18,
+        "end": 1
+      },
+      "components": [
+        {
+          "id": "d-stem",
+          "kind": "capsule",
+          "operation": "union",
+          "groupId": "d-body"
+        },
+        {
+          "id": "d-bowl",
+          "kind": "ellipse",
+          "operation": "union",
+          "groupId": "d-body"
+        },
+        {
+          "id": "d-counter",
+          "kind": "ellipse",
+          "operation": "subtract",
+          "groupId": "d-counter"
+        }
+      ],
+      "keyframes": [
+        {
+          "at": 0,
+          "easing": "linear",
+          "components": [
+            {
+              "id": "d-stem",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 211.9,
+                  "y": 5.1
+                },
+                "end": {
+                  "x": 211.9,
+                  "y": 159
+                },
+                "radius": 27.1
+              }
+            },
+            {
+              "id": "d-bowl",
+              "primitive": {
+                "kind": "ellipse",
+                "center": {
+                  "x": 211.9,
+                  "y": 101.1
+                },
+                "radiusX": 0,
+                "radiusY": 0,
+                "rotation": 0
+              }
+            },
+            {
+              "id": "d-counter",
+              "primitive": {
+                "kind": "ellipse",
+                "center": {
+                  "x": 211.9,
+                  "y": 101.1
+                },
+                "radiusX": 0,
+                "radiusY": 0,
+                "rotation": 0
+              }
+            }
+          ],
+          "material": {
+            "groups": {
+              "$track": {
+                "targetMix": 0,
+                "cornerSharpness": 0,
+                "blendRadius": 0
+              },
+              "d-body": {
+                "blendRadius": 0
+              },
+              "d-counter": {
+                "blendRadius": 0
+              }
+            }
+          }
+        },
+        {
+          "at": 0.25,
+          "easing": "smoothStep",
+          "components": [
+            {
+              "id": "d-stem",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 224,
+                  "y": 12
+                },
+                "end": {
+                  "x": 224,
+                  "y": 150
+                },
+                "radius": 22
+              }
+            },
+            {
+              "id": "d-bowl",
+              "primitive": {
+                "kind": "ellipse",
+                "center": {
+                  "x": 210,
+                  "y": 101
+                },
+                "radiusX": 25,
+                "radiusY": 36,
+                "rotation": 0
+              }
+            },
+            {
+              "id": "d-counter",
+              "primitive": {
+                "kind": "ellipse",
+                "center": {
+                  "x": 210,
+                  "y": 101
+                },
+                "radiusX": 0,
+                "radiusY": 0,
+                "rotation": 0
+              }
+            }
+          ],
+          "material": {
+            "groups": {
+              "$track": {
+                "targetMix": 0,
+                "cornerSharpness": 0.05,
+                "blendRadius": 10
+              },
+              "d-body": {
+                "blendRadius": 10
+              },
+              "d-counter": {
+                "blendRadius": 0
+              }
+            }
+          }
+        },
+        {
+          "at": 0.55,
+          "easing": "smootherStep",
+          "components": [
+            {
+              "id": "d-stem",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 236,
+                  "y": 8
+                },
+                "end": {
+                  "x": 236,
+                  "y": 154
+                },
+                "radius": 19
+              }
+            },
+            {
+              "id": "d-bowl",
+              "primitive": {
+                "kind": "ellipse",
+                "center": {
+                  "x": 212,
+                  "y": 101
+                },
+                "radiusX": 45,
+                "radiusY": 47,
+                "rotation": 0
+              }
+            },
+            {
+              "id": "d-counter",
+              "primitive": {
+                "kind": "ellipse",
+                "center": {
+                  "x": 212,
+                  "y": 101
+                },
+                "radiusX": 15,
+                "radiusY": 22,
+                "rotation": 0
+              }
+            }
+          ],
+          "material": {
+            "groups": {
+              "$track": {
+                "targetMix": 0.08,
+                "cornerSharpness": 0.1,
+                "blendRadius": 8
+              },
+              "d-body": {
+                "blendRadius": 8
+              },
+              "d-counter": {
+                "blendRadius": 0
+              }
+            }
+          }
+        },
+        {
+          "at": 0.72,
+          "easing": "easeOutCubic",
+          "components": [
+            {
+              "id": "d-stem",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 238,
+                  "y": 4
+                },
+                "end": {
+                  "x": 238,
+                  "y": 158
+                },
+                "radius": 18
+              }
+            },
+            {
+              "id": "d-bowl",
+              "primitive": {
+                "kind": "ellipse",
+                "center": {
+                  "x": 212,
+                  "y": 101
+                },
+                "radiusX": 47,
+                "radiusY": 49,
+                "rotation": 0
+              }
+            },
+            {
+              "id": "d-counter",
+              "primitive": {
+                "kind": "ellipse",
+                "center": {
+                  "x": 212,
+                  "y": 101
+                },
+                "radiusX": 20,
+                "radiusY": 25,
+                "rotation": 0
+              }
+            }
+          ],
+          "material": {
+            "groups": {
+              "$track": {
+                "targetMix": 0.18,
+                "cornerSharpness": 0.25,
+                "blendRadius": 4
+              },
+              "d-body": {
+                "blendRadius": 4
+              },
+              "d-counter": {
+                "blendRadius": 0
+              }
+            }
+          }
+        },
+        {
+          "at": 0.9,
+          "easing": "smoothStep",
+          "components": [
+            {
+              "id": "d-stem",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 256,
+                  "y": 0
+                },
+                "end": {
+                  "x": 256,
+                  "y": 161
+                },
+                "radius": 17
+              }
+            },
+            {
+              "id": "d-bowl",
+              "primitive": {
+                "kind": "ellipse",
+                "center": {
+                  "x": 212,
+                  "y": 101
+                },
+                "radiusX": 43,
+                "radiusY": 47,
+                "rotation": 0
+              }
+            },
+            {
+              "id": "d-counter",
+              "primitive": {
+                "kind": "ellipse",
+                "center": {
+                  "x": 212,
+                  "y": 101
+                },
+                "radiusX": 22,
+                "radiusY": 27,
+                "rotation": 0
+              }
+            }
+          ],
+          "material": {
+            "groups": {
+              "$track": {
+                "targetMix": 0.75,
+                "cornerSharpness": 0.8,
+                "blendRadius": 1
+              },
+              "d-body": {
+                "blendRadius": 1
+              },
+              "d-counter": {
+                "blendRadius": 0
+              }
+            }
+          }
+        },
+        {
+          "at": 0.98,
+          "easing": "smootherStep",
+          "components": [
+            {
+              "id": "d-stem",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 255.9,
+                  "y": 0
+                },
+                "end": {
+                  "x": 255.9,
+                  "y": 161.43
+                },
+                "radius": 16
+              }
+            },
+            {
+              "id": "d-bowl",
+              "primitive": {
+                "kind": "ellipse",
+                "center": {
+                  "x": 212.4,
+                  "y": 101.3
+                },
+                "radiusX": 40,
+                "radiusY": 45,
+                "rotation": 0
+              }
+            },
+            {
+              "id": "d-counter",
+              "primitive": {
+                "kind": "ellipse",
+                "center": {
+                  "x": 212.4,
+                  "y": 101.3
+                },
+                "radiusX": 24,
+                "radiusY": 27,
+                "rotation": 0
+              }
+            }
+          ],
+          "material": {
+            "groups": {
+              "$track": {
+                "targetMix": 1,
+                "cornerSharpness": 1,
+                "blendRadius": 0
+              },
+              "d-body": {
+                "blendRadius": 0
+              },
+              "d-counter": {
+                "blendRadius": 0
+              }
+            }
+          }
+        },
+        {
+          "at": 1,
+          "easing": "linear",
+          "components": [
+            {
+              "id": "d-stem",
+              "primitive": {
+                "kind": "capsule",
+                "start": {
+                  "x": 255.9,
+                  "y": 0
+                },
+                "end": {
+                  "x": 255.9,
+                  "y": 161.43
+                },
+                "radius": 16
+              }
+            },
+            {
+              "id": "d-bowl",
+              "primitive": {
+                "kind": "ellipse",
+                "center": {
+                  "x": 212.4,
+                  "y": 101.3
+                },
+                "radiusX": 40,
+                "radiusY": 45,
+                "rotation": 0
+              }
+            },
+            {
+              "id": "d-counter",
+              "primitive": {
+                "kind": "ellipse",
+                "center": {
+                  "x": 212.4,
+                  "y": 101.3
+                },
+                "radiusX": 24,
+                "radiusY": 27,
+                "rotation": 0
+              }
+            }
+          ],
+          "material": {
+            "groups": {
+              "$track": {
+                "targetMix": 1,
+                "cornerSharpness": 1,
+                "blendRadius": 0
+              },
+              "d-body": {
+                "blendRadius": 0
+              },
+              "d-counter": {
+                "blendRadius": 0
+              }
+            }
+          }
+        }
+      ],
+      "events": [
+        {
+          "id": "d-stem-pin",
+          "kind": "step",
+          "at": 0,
+          "componentId": "d-stem",
+          "payload": {
+            "intent": "pin"
+          }
+        },
+        {
+          "id": "d-bowl-adhesion",
+          "kind": "step",
+          "at": 0.35,
+          "componentId": "d-bowl",
+          "payload": {
+            "intent": "adhesion"
+          }
+        },
+        {
+          "id": "d-counter-release",
+          "kind": "release",
+          "at": 0.68,
+          "end": 0.74,
+          "componentId": "d-counter",
+          "payload": {
+            "intent": "release"
+          }
+        },
+        {
+          "id": "d-endpoint-snap",
+          "kind": "step",
+          "at": 0.98,
+          "componentId": "d-stem",
+          "payload": {
+            "intent": "snap-to-target"
+          }
+        }
+      ]
+    }
+  ],
+  "reducedMotion": {
+    "mode": "crossfade",
+    "durationMs": 180,
+    "fadeStart": 0.12,
+    "fadeEnd": 0.88
+  }
+}

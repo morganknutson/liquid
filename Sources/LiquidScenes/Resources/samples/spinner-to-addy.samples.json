@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "sceneId": "spinner-to-addy",
+  "samples": [
+    {
+      "label": "empty-pill",
+      "progress": 0
+    },
+    {
+      "label": "ticks-falling",
+      "progress": 0.134
+    },
+    {
+      "label": "ticks-bouncing",
+      "progress": 0.336
+    },
+    {
+      "label": "beat",
+      "progress": 0.475
+    },
+    {
+      "label": "a-gather",
+      "progress": 0.52
+    },
+    {
+      "label": "a-crossbar-adhesion",
+      "progress": 0.609
+    },
+    {
+      "label": "d1-hook",
+      "progress": 0.62
+    },
+    {
+      "label": "y-drip",
+      "progress": 0.664
+    },
+    {
+      "label": "sharpening",
+      "progress": 0.874
+    },
+    {
+      "label": "endpoint-lock",
+      "progress": 1
+    }
+  ]
+}

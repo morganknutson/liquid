@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://addy.dev/liquid/schema/liquid-frame.v2.json",
+  "title": "Liquid Evaluator Output v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "sceneId", "fixtureVersion", "samples"],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "sceneId": { "type": "string", "minLength": 1 },
+    "fixtureVersion": { "type": "integer", "minimum": 1 },
+    "samples": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/sample" }
+    }
+  },
+  "$defs": {
+    "point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": { "x": { "type": "number" }, "y": { "type": "number" } }
+    },
+    "transform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["translateX", "translateY", "scaleX", "scaleY"],
+      "properties": {
+        "translateX": { "type": "number" },
+        "translateY": { "type": "number" },
+        "scaleX": { "type": "number" },
+        "scaleY": { "type": "number" }
+      }
+    },
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": {
+        "type": { "enum": ["M", "L", "C", "Z"] },
+        "values": { "type": "array", "items": { "type": "number" } }
+      }
+    },
+    "endpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assetId", "shapeId", "transform", "commands"],
+      "properties": {
+        "assetId": { "type": "string", "minLength": 1 },
+        "shapeId": { "type": "string", "minLength": 1 },
+        "transform": { "$ref": "#/$defs/transform" },
+        "commands": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/command" }
+        }
+      }
+    },
+    "capsule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "start", "end", "radius"],
+      "properties": {
+        "kind": { "const": "capsule" },
+        "start": { "$ref": "#/$defs/point" },
+        "end": { "$ref": "#/$defs/point" },
+        "radius": { "type": "number" }
+      }
+    },
+    "ribbon": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "p0", "p1", "p2", "p3", "startRadius", "endRadius"],
+      "properties": {
+        "kind": { "const": "ribbon" },
+        "p0": { "$ref": "#/$defs/point" },
+        "p1": { "$ref": "#/$defs/point" },
+        "p2": { "$ref": "#/$defs/point" },
+        "p3": { "$ref": "#/$defs/point" },
+        "startRadius": { "type": "number" },
+        "endRadius": { "type": "number" }
+      }
+    },
+    "ellipse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "center", "radiusX", "radiusY"],
+      "properties": {
+        "kind": { "const": "ellipse" },
+        "center": { "$ref": "#/$defs/point" },
+        "radiusX": { "type": "number" },
+        "radiusY": { "type": "number" },
+        "rotation": { "type": "number" }
+      }
+    },
+    "primitive": {
+      "oneOf": [
+        { "$ref": "#/$defs/capsule" },
+        { "$ref": "#/$defs/ribbon" },
+        { "$ref": "#/$defs/ellipse" }
+      ]
+    },
+    "materialValues": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["number", "string", "boolean"]
+      }
+    },
+    "materialMap": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/materialValues" }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "operation", "primitive", "material"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["capsule", "ribbon", "ellipse"] },
+        "operation": { "enum": ["union", "subtract"] },
+        "groupId": { "type": "string", "minLength": 1 },
+        "primitive": { "$ref": "#/$defs/primitive" },
+        "material": { "$ref": "#/$defs/materialValues" }
+      }
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "trackId", "at"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["step", "release"] },
+        "trackId": { "type": "string", "minLength": 1 },
+        "at": { "type": "number", "minimum": 0, "maximum": 1 },
+        "end": { "type": "number", "minimum": 0, "maximum": 1 },
+        "componentId": { "type": "string", "minLength": 1 },
+        "payload": { "$ref": "#/$defs/materialValues" }
+      }
+    },
+    "track": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "progress",
+        "localProgress",
+        "renderMode",
+        "sourceOpacity",
+        "targetOpacity",
+        "source",
+        "target",
+        "endpointCommands",
+        "components",
+        "material"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "progress": { "type": "number", "minimum": 0, "maximum": 1 },
+        "localProgress": { "type": "number", "minimum": 0, "maximum": 1 },
+        "renderMode": { "enum": ["sourcePath", "field", "targetPath", "crossfade"] },
+        "sourceOpacity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "targetOpacity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "source": { "$ref": "#/$defs/endpoint" },
+        "target": { "$ref": "#/$defs/endpoint" },
+        "endpointCommands": {
+          "type": ["array", "null"],
+          "items": { "$ref": "#/$defs/command" }
+        },
+        "components": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/component" }
+        },
+        "material": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["components", "groups"],
+          "properties": {
+            "components": { "$ref": "#/$defs/materialMap" },
+            "groups": { "$ref": "#/$defs/materialMap" }
+          }
+        }
+      }
+    },
+    "sample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "progress", "events", "tracks"],
+      "properties": {
+        "label": { "type": "string" },
+        "progress": { "type": "number", "minimum": 0, "maximum": 1 },
+        "events": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/event" }
+        },
+        "tracks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/track" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+export const capsuleToASceneURL = new URL("./scenes/capsule-to-a.v1.json", import.meta.url);
+export const spinnerToAdSceneURL = new URL("./scenes/spinner-to-ad.v2.json", import.meta.url);
+export const spinnerToAddySceneURL = new URL("./scenes/spinner-to-addy.v2.json", import.meta.url);
+export const addyLogoWaveSceneURL = new URL("./scenes/addy-logo-wave.v2.json", import.meta.url);
+export const addyLogoWaveWordmarkSceneURL = new URL("./scenes/addy-logo-wave-wordmark.v2.json", import.meta.url);
+export const capsuleToASamplesURL = new URL("./samples/capsule-to-a.samples.json", import.meta.url);
+export const spinnerToAdSamplesURL = new URL("./samples/spinner-to-ad.samples.json", import.meta.url);
+export const spinnerToAddySamplesURL = new URL("./samples/spinner-to-addy.samples.json", import.meta.url);
+export const addyLogoWaveSamplesURL = new URL("./samples/addy-logo-wave.samples.json", import.meta.url);
+export const addyLogoWaveWordmarkSamplesURL = new URL("./samples/addy-logo-wave-wordmark.samples.json", import.meta.url);
+export const assetManifestURL = new URL("./assets/manifest.json", import.meta.url);
+export const resourceManifestURL = new URL("./resources.manifest.json", import.meta.url);

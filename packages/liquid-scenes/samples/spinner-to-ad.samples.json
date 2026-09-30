@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "sceneId": "spinner-to-ad",
+  "samples": [
+    {
+      "label": "source",
+      "progress": 0
+    },
+    {
+      "label": "d-start-stagger",
+      "progress": 0.18
+    },
+    {
+      "label": "a-bifurcation",
+      "progress": 0.32
+    },
+    {
+      "label": "dual-adhesion",
+      "progress": 0.54
+    },
+    {
+      "label": "before-release",
+      "progress": 0.72
+    },
+    {
+      "label": "after-release",
+      "progress": 0.76
+    },
+    {
+      "label": "relaxation",
+      "progress": 0.9
+    },
+    {
+      "label": "endpoint-lock",
+      "progress": 1
+    }
+  ]
+}

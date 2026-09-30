@@ -1,0 +1,12 @@
+export declare const capsuleToASceneURL: URL;
+export declare const spinnerToAdSceneURL: URL;
+export declare const spinnerToAddySceneURL: URL;
+export declare const addyLogoWaveSceneURL: URL;
+export declare const addyLogoWaveWordmarkSceneURL: URL;
+export declare const capsuleToASamplesURL: URL;
+export declare const spinnerToAdSamplesURL: URL;
+export declare const spinnerToAddySamplesURL: URL;
+export declare const addyLogoWaveSamplesURL: URL;
+export declare const addyLogoWaveWordmarkSamplesURL: URL;
+export declare const assetManifestURL: URL;
+export declare const resourceManifestURL: URL;
