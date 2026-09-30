@@ -4,7 +4,7 @@ Liquid scenes can be consumed from npm packages on the web or from SwiftPM modul
 
 ## Addy logo
 
-The animated Addy logo ships as ready-made wrappers around three scenes that share the same drop-in: `spinner-to-addy` (the ticks become the wordmark), `addy-logo-wave` (Addy's pill wave loops), and `addy-logo-wave-wordmark` (the pills wave three times, then become the wordmark): `@liquid/addy-logo` for websites and the `AddyLogo` SwiftPM product for macOS apps. Both size to the width they are given, keep the artwork's 2973:1568 aspect ratio, fill with the surrounding text color by default, follow the system reduced-motion setting (a 180ms fade instead of the full animation), and hold on the exact wordmark when done.
+The animated Addy logo ships as ready-made wrappers around four scenes that share the same drop-in: `spinner-to-addy` (the ticks become the wordmark), `addy-logo-wave` (Addy's pill wave loops), `addy-logo-wave-wordmark` (the pills wave three times, then become the wordmark), and `addy-logo-wave-wordmark-replay` (the same, and clicking the finished logo drops the letters out of the pill, y first, and plays it again): `@liquid/addy-logo` for websites and the `AddyLogo` SwiftPM product for macOS apps. Both size to the width they are given, keep the artwork's 2973:1568 aspect ratio, fill with the surrounding text color by default, follow the system reduced-motion setting (a 180ms fade instead of the full animation), and hold on the exact wordmark when done.
 
 ### Website
 
@@ -20,8 +20,8 @@ defineAddyLogoElement(); // registers <addy-logo>; safe to call more than once a
 ```
 
 - Children are a fallback: they render during server rendering and without JavaScript, and are hidden once the first frame is drawn. Use `shared/assets/addy-logo-wordmark.svg`, the logo's final frame.
-- Attributes: `variant` (`wordmark`, the default; `wave` for the looping pill wave, which loops unless `loop="false"`; or `wave-wordmark` to wave three times and then become the wordmark), `color` (any CSS color; defaults to the element's `color`), `autoplay` (`visible`, the default, plays once the logo is half in view; `immediate`; or `none`), `loop`, and `label` (accessible name, default `Addy`).
-- Methods `play()`, `pause()`, and `replay()`. A `complete` event fires when a non-looping play reaches the wordmark.
+- Attributes: `variant` (`wordmark`, the default; `wave` for the looping pill wave, which loops unless `loop="false"`; `wave-wordmark` to wave three times and then become the wordmark; or `wave-wordmark-replay`, which plays like `wave-wordmark` and, once finished, replays on click or Enter/Space, dropping the letters out first), `color` (any CSS color; defaults to the element's `color`), `autoplay` (`visible`, the default, plays once the logo is half in view; `immediate`; or `none`), `loop`, and `label` (accessible name, default `Addy`).
+- Methods `play()`, `pause()`, `replay()`, and `dropAndReplay()` (what a click does on `wave-wordmark-replay`; returns whether it started). A `complete` event fires when a non-looping play reaches the wordmark.
 - Without the custom element (for example inside a framework component), call `mountAddyLogo(container, options)` and `destroy()` the returned handle on unmount. It takes the same options plus `onComplete`, `scene` (a preloaded scene), and `sceneURL`. `handle.ready` resolves with the underlying `LiquidCanvasPlayer`.
 
 In React, use the element directly after calling `defineAddyLogoElement()` in an effect, or mount imperatively:
@@ -49,13 +49,14 @@ AddyLogoView(color: .accentColor, loop: true)
 
 AddyLogoView(variant: .wave)                   // drop in, then Addy's pill wave until paused
 AddyLogoView(variant: .waveThenWordmark)       // drop in, wave three times, then the wordmark
+AddyLogoView(variant: .waveThenWordmarkReplay) // same; clicking the finished logo drops the letters and replays
 
 @StateObject var logo = try! AddyLogoController()
 AddyLogoView(controller: logo, playsOnAppear: false) { print("done") }
 Button("Replay") { logo.replay() }
 ```
 
-`AddyLogoView` resolves dynamic colors like `.primary` against the view's color scheme, renders through Metal when available (Core Graphics otherwise) with a backing capped at 1600px, pauses on disappear, and exposes the accessibility label "Addy" as an image. `AddyLogoController` adds `play()`, `pause()`, `replay()`, `showWordmark()`, and a published `isComplete`.
+`AddyLogoView` resolves dynamic colors like `.primary` against the view's color scheme, renders through Metal when available (Core Graphics otherwise) with a backing capped at 1600px, pauses on disappear, and exposes the accessibility label "Addy" as an image. `AddyLogoController` adds `play()`, `pause()`, `replay()`, `dropAndReplay()`, `showWordmark()`, and a published `isComplete`.
 
 ## Web
 

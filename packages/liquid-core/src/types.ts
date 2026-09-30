@@ -119,6 +119,12 @@ export interface LiquidTrack {
   readonly target: Endpoint;
   readonly timing: TrackTiming;
   readonly interpolation?: TrackInterpolation;
+  /**
+   * When true, the track always draws its exact target shape, moved by its
+   * `$track` placement, instead of a liquid field: for rigid motion of a
+   * finished shape, such as letters dropping out of a frame.
+   */
+  readonly rigid?: boolean;
   readonly components: readonly ComponentDefinition[];
   readonly keyframes: readonly TrackKeyframe[];
   readonly events?: readonly SemanticEvent[];
@@ -182,7 +188,17 @@ export interface LiquidSceneV2 {
    * instead of 0, so an intro before it plays once. Reduced motion does not loop.
    */
   readonly loop?: { readonly start: number };
+  /**
+   * Named points in normalized progress that hosts can seek to, for example
+   * where the main animation starts after an optional outro.
+   */
+  readonly markers?: readonly SceneMarker[];
   readonly reducedMotion: ReducedMotion;
+}
+
+export interface SceneMarker {
+  readonly id: string;
+  readonly at: number;
 }
 
 export type AnyLiquidScene = LiquidScene | LiquidSceneV2;

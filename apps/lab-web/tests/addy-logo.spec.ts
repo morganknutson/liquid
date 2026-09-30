@@ -42,10 +42,12 @@ async function logoState(page: Page, selector: string) {
 }
 
 test("addy-logo plays once when visible, inherits color, and fires complete", async ({ page }) => {
+  // The demo page renders five logos on the CPU in headless runs; allow for a loaded machine.
+  test.setTimeout(60_000);
   const errors = collectErrors(page);
   await page.goto("/addy-logo.html");
 
-  await expect(page.locator("#hero")).toHaveAttribute("data-completed", "1", { timeout: 10_000 });
+  await expect(page.locator("#hero")).toHaveAttribute("data-completed", "1", { timeout: 20_000 });
   const hero = await logoState(page, "#hero");
   expect(hero).toMatchObject({ hidden: false, fallbackHidden: true, label: "Addy" });
   expect(hero!.cssRatio).toBeCloseTo(2973 / 1568, 1);
@@ -59,7 +61,7 @@ test("addy-logo plays once when visible, inherits color, and fires complete", as
 
   await page.locator("#replay").click();
   await expect(page.locator("#status")).toHaveText("playing");
-  await expect(page.locator("#hero")).toHaveAttribute("data-completed", "2", { timeout: 10_000 });
+  await expect(page.locator("#hero")).toHaveAttribute("data-completed", "2", { timeout: 20_000 });
   expect(errors).toEqual([]);
 });
 
@@ -105,6 +107,28 @@ test("addy-logo wave variant drops in, keeps waving past the scene length, and p
   const paused = await canvasSignature(page, "#wave");
   await page.waitForTimeout(400);
   expect(await canvasSignature(page, "#wave")).toBe(paused);
+  expect(errors).toEqual([]);
+});
+
+test("addy-logo wave-wordmark-replay variant drops the letters and plays again when clicked", async ({ page }) => {
+  // Two full plays, rendered on the CPU in headless runs; allow for a loaded machine.
+  test.setTimeout(90_000);
+  const errors = collectErrors(page);
+  await page.goto("/addy-logo.html");
+  await page.locator("#replayable").scrollIntoViewIfNeeded();
+  await expect(page.locator("#replayable")).toHaveAttribute("data-completed", "1", { timeout: 30_000 });
+  const landed = await logoState(page, "#replayable");
+  const hero = await logoState(page, "#hero");
+  expect(landed!.label).toBe("Addy");
+  expect(Math.abs(landed!.covered - hero!.covered) / hero!.covered).toBeLessThan(0.02);
+
+  await page.locator("#replayable").click();
+  await expect(page.locator("#replayable-status")).toHaveText("playing");
+  // The letters fall out and the ticks drop back in, so for a few seconds the
+  // pill holds much less than the wordmark.
+  await expect.poll(async () => (await logoState(page, "#replayable"))!.covered, { timeout: 10_000 }).toBeLessThan(landed!.covered * 0.85);
+  await expect(page.locator("#replayable")).toHaveAttribute("data-completed", "2", { timeout: 30_000 });
+  expect(Math.abs((await logoState(page, "#replayable"))!.covered - hero!.covered) / hero!.covered).toBeLessThan(0.02);
   expect(errors).toEqual([]);
 });
 

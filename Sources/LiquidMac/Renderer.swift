@@ -227,7 +227,8 @@ public final class LiquidCGRenderer {
 
         let mapping = ScenePixelMapping(sceneSize: scene.coordinateSpace, width: width, height: height)
         let ramp = mapping.sceneUnitsPerPixel
-        for track in evaluated.tracks {
+        // Tracks clipped away entirely paint nothing.
+        for track in evaluated.tracks where !LiquidSDF.trackIsClippedAway(scene: scene, track: track) {
             writeTrackMask(scene: scene, track: track, mapping: mapping, ramp: ramp, width: width, height: height)
             for index in 0..<pixelCount {
                 let existing = Double(alphaBuffer[index]) / 255
@@ -422,7 +423,7 @@ public final class LiquidCGRenderer {
         switch track.renderMode {
         case .sourcePath, .targetPath:
             let isSource = track.renderMode == .sourcePath
-            let raster = cachedEndpointDistanceRaster(scene: scene, trackId: track.id, endpointRole: isSource ? "source" : "target", endpoint: isSource ? track.source : track.target, mapping: mapping)
+            let raster = cachedEndpointDistanceRaster(scene: scene, endpoint: isSource ? track.source : track.target, mapping: mapping)
             for y in 0..<height {
                 for x in 0..<width {
                     let index = y * width + x
@@ -432,8 +433,8 @@ public final class LiquidCGRenderer {
         case .field:
             writeTrackFieldMask(scene: scene, track: track, placement: placement, mapping: mapping, ramp: ramp, width: width, height: height)
         case .crossfade:
-            let source = track.sourceOpacity > 0 ? cachedEndpointDistanceRaster(scene: scene, trackId: track.id, endpointRole: "source", endpoint: track.source, mapping: mapping) : nil
-            let target = track.targetOpacity > 0 ? cachedEndpointDistanceRaster(scene: scene, trackId: track.id, endpointRole: "target", endpoint: track.target, mapping: mapping) : nil
+            let source = track.sourceOpacity > 0 ? cachedEndpointDistanceRaster(scene: scene, endpoint: track.source, mapping: mapping) : nil
+            let target = track.targetOpacity > 0 ? cachedEndpointDistanceRaster(scene: scene, endpoint: track.target, mapping: mapping) : nil
             for y in 0..<height {
                 for x in 0..<width {
                     let index = y * width + x
@@ -450,7 +451,7 @@ public final class LiquidCGRenderer {
         let targetMix = preparedTrack.targetMix
         let opacity = preparedTrack.fieldOpacity
         let distanceScale = placement?.scale ?? 1
-        let target = targetMix > 0 ? cachedEndpointDistanceRaster(scene: scene, trackId: track.id, endpointRole: "target", endpoint: track.target, mapping: mapping) : nil
+        let target = targetMix > 0 ? cachedEndpointDistanceRaster(scene: scene, endpoint: track.target, mapping: mapping) : nil
         for y in 0..<height {
             for x in 0..<width {
                 let index = y * width + x
@@ -478,12 +479,10 @@ public final class LiquidCGRenderer {
 
     private func cachedEndpointDistanceRaster(
         scene: LiquidSceneV2,
-        trackId: String,
-        endpointRole: String,
         endpoint: LiquidEndpoint,
         mapping: ScenePixelMapping
     ) -> EndpointDistanceRaster {
-        let key = EndpointDistanceRasterKey(scene: scene, trackId: trackId, endpointRole: endpointRole, endpoint: endpoint, width: mapping.width, height: mapping.height)
+        let key = EndpointDistanceRasterKey(scene: scene, endpoint: endpoint, width: mapping.width, height: mapping.height)
         if let raster = endpointDistanceRasters.first(where: { $0.key == key }) {
             return raster
         }
@@ -693,13 +692,12 @@ private struct ScenePixelMapping {
     }
 }
 
+// Keyed by the shape itself, so tracks drawing the same endpoint share one raster.
 private struct EndpointDistanceRasterKey: Equatable {
     var sceneId: String
     var fixtureVersion: Int
     var fillRule: LiquidFillRule
     var coordinateSpace: LiquidSize
-    var trackId: String?
-    var endpointRole: String?
     var width: Int
     var height: Int
     var transformedCommands: [LiquidPathCommand]
@@ -709,20 +707,16 @@ private struct EndpointDistanceRasterKey: Equatable {
         self.fixtureVersion = scene.fixtureVersion
         self.fillRule = scene.fillRule
         self.coordinateSpace = scene.coordinateSpace
-        self.trackId = nil
-        self.endpointRole = nil
         self.width = width
         self.height = height
         self.transformedCommands = endpoint.transformedCommands
     }
 
-    init(scene: LiquidSceneV2, trackId: String, endpointRole: String, endpoint: LiquidEndpoint, width: Int, height: Int) {
+    init(scene: LiquidSceneV2, endpoint: LiquidEndpoint, width: Int, height: Int) {
         self.sceneId = scene.id
         self.fixtureVersion = scene.fixtureVersion
         self.fillRule = scene.fillRule
         self.coordinateSpace = scene.coordinateSpace
-        self.trackId = trackId
-        self.endpointRole = endpointRole
         self.width = width
         self.height = height
         self.transformedCommands = endpoint.transformedCommands

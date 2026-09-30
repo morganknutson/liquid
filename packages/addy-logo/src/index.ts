@@ -1,5 +1,5 @@
 import type { LiquidSceneV2 } from "@liquid/core";
-import { addyLogoWaveSceneURL, addyLogoWaveWordmarkSceneURL, spinnerToAddySceneURL } from "@liquid/scenes";
+import { addyLogoWaveSceneURL, addyLogoWaveWordmarkReplaySceneURL, addyLogoWaveWordmarkSceneURL, spinnerToAddySceneURL } from "@liquid/scenes";
 import { LiquidCanvasPlayer, LiquidWebGLRenderer, type ReducedMotionSetting } from "@liquid/web";
 
 /** Size of the Addy logo artwork (pill, ticks, and wordmark) in scene units. */
@@ -16,15 +16,23 @@ export type AddyLogoAutoplay = "visible" | "immediate" | "none";
 /**
  * Which animation plays after the ticks drop into the pill: `"wordmark"` flows
  * into the Addy wordmark and holds; `"wave"` runs Addy's pill wave, looping
- * until paused; `"wave-wordmark"` waves three times and then flows into the wordmark.
+ * until paused; `"wave-wordmark"` waves three times and then flows into the wordmark;
+ * `"wave-wordmark-replay"` plays like `"wave-wordmark"`, and clicking the
+ * finished logo drops the letters out of the pill (y first) and plays it again.
  */
-export type AddyLogoVariant = "wordmark" | "wave" | "wave-wordmark";
+export type AddyLogoVariant = "wordmark" | "wave" | "wave-wordmark" | "wave-wordmark-replay";
 
 const variantSceneURLs: Readonly<Record<AddyLogoVariant, URL>> = {
   wordmark: spinnerToAddySceneURL,
   wave: addyLogoWaveSceneURL,
   "wave-wordmark": addyLogoWaveWordmarkSceneURL,
+  "wave-wordmark-replay": addyLogoWaveWordmarkReplaySceneURL,
 };
+
+/** Where playback starts: the scene's "enter" marker (after the replay's letter drop), else 0. */
+function enterProgress(scene: LiquidSceneV2): number {
+  return scene.markers?.find((marker) => marker.id === "enter")?.at ?? 0;
+}
 
 export interface AddyLogoOptions {
   /** Defaults to `"wordmark"`. */
@@ -60,6 +68,12 @@ export interface AddyLogoHandle {
   pause(): void;
   /** Plays again from the empty pill. */
   replay(): void;
+  /**
+   * For `"wave-wordmark-replay"`: once the logo has finished, drops the letters
+   * out of the pill and plays again. This is what a click or Enter/Space does.
+   * Returns whether it started.
+   */
+  dropAndReplay(): boolean;
   seek(progress: number): void;
   /** Updates the fill color; with no argument, re-reads the container's computed `color`. */
   setColor(color?: string): void;
@@ -113,6 +127,7 @@ export function mountAddyLogo(container: HTMLElement, options: AddyLogoOptions =
   let intersection: IntersectionObserver | null = null;
   let completionFrame: number | null = null;
   let pendingPlay = false;
+  let enter = 0;
   const colorScheme = view.matchMedia?.("(prefers-color-scheme: dark)") ?? null;
 
   const resolveColor = () => explicitColor ?? (view.getComputedStyle(container).color || "black");
@@ -121,6 +136,7 @@ export function mountAddyLogo(container: HTMLElement, options: AddyLogoOptions =
   };
 
   const variant = options.variant ?? "wordmark";
+  const clickToReplay = variant === "wave-wordmark-replay";
   const loop = options.loop ?? variant === "wave";
 
   const watchCompletion = () => {
@@ -146,6 +162,24 @@ export function mountAddyLogo(container: HTMLElement, options: AddyLogoOptions =
     watchCompletion();
   };
 
+  // Reduced motion plays the whole scene as a short fade, so it starts at 0.
+  const startProgress = () => (player?.reducedMotionEnabled ? 0 : enter);
+
+  const dropAndReplay = () => {
+    if (!clickToReplay || !player || player.isPlaying || player.progress < 1 || player.reducedMotionEnabled) return false;
+    player.seek(0);
+    player.play();
+    watchCompletion();
+    return true;
+  };
+  const onClick = () => {
+    dropAndReplay();
+  };
+  const onKeyDown = (event: KeyboardEvent) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    if (dropAndReplay()) event.preventDefault();
+  };
+
   const defaultSceneURL = variantSceneURLs[variant];
   const ready = (options.scene ? Promise.resolve(options.scene) : loadScene(options.sceneURL ?? defaultSceneURL)).then((scene) => {
     if (destroyed) throw new Error("The Addy logo was destroyed before it finished loading");
@@ -161,8 +195,17 @@ export function mountAddyLogo(container: HTMLElement, options: AddyLogoOptions =
       maxBackingDimension: webgl ? WEBGL_MAX_BACKING_DIMENSION : CPU_MAX_BACKING_DIMENSION,
       observeResize: true,
     });
+    enter = enterProgress(scene);
+    if (startProgress() > 0) player.seek(startProgress());
     for (const element of fallback) element.hidden = true;
     colorScheme?.addEventListener?.("change", onColorSchemeChange);
+    if (clickToReplay) {
+      canvas.style.cursor = "pointer";
+      canvas.tabIndex = 0;
+      canvas.setAttribute("role", "button");
+      canvas.addEventListener("click", onClick);
+      canvas.addEventListener("keydown", onKeyDown);
+    }
 
     const autoplay = options.autoplay ?? "visible";
     if (pendingPlay || autoplay === "immediate") {
@@ -199,9 +242,12 @@ export function mountAddyLogo(container: HTMLElement, options: AddyLogoOptions =
         pendingPlay = true;
         return;
       }
-      player.restart();
+      player.pause();
+      player.seek(startProgress());
+      player.play();
       watchCompletion();
     },
+    dropAndReplay,
     seek(progress) {
       player?.seek(progress);
     },
@@ -215,6 +261,8 @@ export function mountAddyLogo(container: HTMLElement, options: AddyLogoOptions =
       intersection?.disconnect();
       if (completionFrame !== null) view.cancelAnimationFrame(completionFrame);
       colorScheme?.removeEventListener?.("change", onColorSchemeChange);
+      canvas.removeEventListener("click", onClick);
+      canvas.removeEventListener("keydown", onKeyDown);
       player?.destroy();
       canvas.remove();
       for (const element of fallback) element.hidden = false;
@@ -226,11 +274,11 @@ const booleanAttribute = (element: Element, name: string) => element.hasAttribut
 
 /**
  * Registers `<addy-logo>` (or `tagName`). Attributes: `variant` (`wordmark` |
- * `wave` | `wave-wordmark`), `color`, `autoplay` (`visible` | `immediate` | `none`), `loop`
+ * `wave` | `wave-wordmark` | `wave-wordmark-replay`), `color`, `autoplay` (`visible` | `immediate` | `none`), `loop`
  * (the wave loops unless `loop="false"`), and `label`. Children are shown
  * as a fallback until the animation is ready. The element fires a `complete`
  * event when a non-looping play reaches the wordmark and exposes `play()`,
- * `pause()`, and `replay()`. Safe to call more than once and during SSR.
+ * `pause()`, `replay()`, and `dropAndReplay()`. Safe to call more than once and during SSR.
  */
 export function defineAddyLogoElement(tagName = "addy-logo"): void {
   if (typeof customElements === "undefined" || customElements.get(tagName)) return;
@@ -249,7 +297,8 @@ export function defineAddyLogoElement(tagName = "addy-logo"): void {
       const color = this.getAttribute("color");
       const label = this.getAttribute("label");
       const requestedVariant = this.getAttribute("variant");
-      const variant: AddyLogoVariant = requestedVariant === "wave" || requestedVariant === "wave-wordmark" ? requestedVariant : "wordmark";
+      const variants: readonly AddyLogoVariant[] = ["wave", "wave-wordmark", "wave-wordmark-replay"];
+      const variant = variants.find((candidate) => candidate === requestedVariant) ?? "wordmark";
       this.#handle = mountAddyLogo(stage, {
         variant,
         autoplay: autoplay === "immediate" || autoplay === "none" ? autoplay : "visible",
@@ -280,6 +329,10 @@ export function defineAddyLogoElement(tagName = "addy-logo"): void {
 
     replay(): void {
       this.#handle?.replay();
+    }
+
+    dropAndReplay(): boolean {
+      return this.#handle?.dropAndReplay() ?? false;
     }
   }
 

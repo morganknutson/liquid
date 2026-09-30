@@ -54,6 +54,15 @@ extension LiquidValidator {
                 throw LiquidValidationError.invalidScene("scene.loop.start must satisfy 0 <= start < 1")
             }
         }
+        var markerIds = Set<String>()
+        for (index, marker) in (scene.markers ?? []).enumerated() {
+            guard !marker.id.isEmpty, markerIds.insert(marker.id).inserted else {
+                throw LiquidValidationError.invalidScene("scene.markers[\(index)].id must be a non-empty, unique string")
+            }
+            guard marker.at.isFinite, marker.at >= 0, marker.at <= 1 else {
+                throw LiquidValidationError.invalidScene("scene.markers[\(index)].at must satisfy 0 <= at <= 1")
+            }
+        }
 
         var trackIds = Set<String>()
         for (trackIndex, track) in scene.tracks.enumerated() {
@@ -311,11 +320,13 @@ extension LiquidEvaluator {
             componentMaterials = materialRecord(previous.material?.components, next.material?.components, progress: local)
             groupMaterials = materialRecord(previous.material?.groups, next.material?.groups, progress: local)
         }
+        // Rigid tracks always show their exact target; placement moves it.
+        let endpointProgress = track.rigid == true ? 1 : localProgress
         let opacity = reducedMotion
             ? reducedMotionOpacityV2(scene.reducedMotion, progress: progress)
-            : (source: localProgress == 1 ? 0 : 1, target: localProgress == 0 ? 0 : (localProgress == 1 ? 1 : 0))
-        let renderMode: LiquidRenderMode = reducedMotion ? .crossfade : (localProgress == 0 ? .sourcePath : (localProgress == 1 ? .targetPath : .field))
-        let endpointCommands: [LiquidPathCommand]? = reducedMotion ? nil : (localProgress == 0 ? track.source.commands : (localProgress == 1 ? track.target.commands : nil))
+            : (source: endpointProgress == 1 ? 0 : 1, target: endpointProgress == 0 ? 0 : (endpointProgress == 1 ? 1 : 0))
+        let renderMode: LiquidRenderMode = reducedMotion ? .crossfade : (endpointProgress == 0 ? .sourcePath : (endpointProgress == 1 ? .targetPath : .field))
+        let endpointCommands: [LiquidPathCommand]? = reducedMotion ? nil : (endpointProgress == 0 ? track.source.commands : (endpointProgress == 1 ? track.target.commands : nil))
         let components = track.components.map { definition in
             LiquidComponentFrame(
                 id: definition.id,

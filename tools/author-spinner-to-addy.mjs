@@ -33,6 +33,8 @@ const waveScenePath = path.join(root, "shared/scenes/addy-logo-wave.v2.json");
 const waveSamplesPath = path.join(root, "shared/golden/addy-logo-wave.samples.json");
 const waveWordmarkScenePath = path.join(root, "shared/scenes/addy-logo-wave-wordmark.v2.json");
 const waveWordmarkSamplesPath = path.join(root, "shared/golden/addy-logo-wave-wordmark.samples.json");
+const replayScenePath = path.join(root, "shared/scenes/addy-logo-wave-wordmark-replay.v2.json");
+const replaySamplesPath = path.join(root, "shared/golden/addy-logo-wave-wordmark-replay.samples.json");
 
 const round = (value) => Math.round(value * 10000) / 10000;
 const pt = (x, y) => ({ x: round(x), y: round(y) });
@@ -993,6 +995,109 @@ export function addyLogoWaveWordmarkSamples() {
   };
 }
 
+// addy-logo-wave-wordmark-replay: the wave-wordmark animation preceded by an
+// exit, played when the finished logo is clicked. The letters drop out through
+// the bottom of the pill, staggered from the y back to the A (EXIT_ORDER): each
+// lifts a touch (EXIT_LIFT over EXIT_LIFT_MS), then falls with gravity
+// (EXIT_FALL_MS). After a short empty beat (EXIT_BEAT_MS) the ticks drop in and
+// the whole wave-wordmark animation plays again. Each exit track is rigid: the
+// exact glyph, moved by track placement and clipped to the pill. The ticks
+// wait above the pill, clipped away, until their own tracks start. The
+// "enter" marker is where the wave-wordmark part starts; first plays seek there.
+const EXIT_ORDER = ["wave-to-y", "wave-to-d2", "wave-to-d1", "wave-to-a"];
+const EXIT_STAGGER_MS = 80;
+const EXIT_LIFT = 40;
+const EXIT_LIFT_MS = 120;
+const EXIT_FALL_MS = 360;
+const EXIT_FALL_DISTANCE = 1150;
+const EXIT_BEAT_MS = 180;
+const EXIT_SAMPLE_MS = 16;
+
+function exitOffset(ms) {
+  if (ms <= EXIT_LIFT_MS) {
+    const t = ms / EXIT_LIFT_MS;
+    return -EXIT_LIFT * (1 - (1 - t) ** 2);
+  }
+  const t = Math.min(1, (ms - EXIT_LIFT_MS) / EXIT_FALL_MS);
+  return -EXIT_LIFT + (EXIT_FALL_DISTANCE + EXIT_LIFT) * t * t;
+}
+
+export function authorAddyLogoWaveWordmarkReplay(manifest) {
+  const base = authorAddyLogoWaveWordmark(manifest);
+  const letterMs = EXIT_LIFT_MS + EXIT_FALL_MS;
+  const exitMs = (EXIT_ORDER.length - 1) * EXIT_STAGGER_MS + letterMs + EXIT_BEAT_MS;
+  const durationMs = exitMs + base.durationMs;
+  const enter = round6(exitMs / durationMs);
+  const shift = (value) => round6(enter + value * (1 - enter));
+
+  const exitTracks = EXIT_ORDER.map((id, order) => {
+    const letter = base.tracks.find((track) => track.id === id);
+    const landed = letter.keyframes[letter.keyframes.length - 1];
+    const startMs = order * EXIT_STAGGER_MS;
+    const keyframes = [];
+    for (let ms = 0; ms < letterMs; ms += EXIT_SAMPLE_MS) keyframes.push(ms);
+    keyframes.push(letterMs);
+    return {
+      id: id.replace(/^wave-to-/, "exit-"),
+      source: letter.target,
+      target: letter.target,
+      timing: { start: round6(startMs / durationMs), end: round6((startMs + letterMs) / durationMs) },
+      interpolation: "monotoneCubic",
+      rigid: true,
+      components: letter.components,
+      keyframes: keyframes.map((ms) => ({
+        at: round6(ms / letterMs),
+        easing: "linear",
+        components: landed.components,
+        material: {
+          ...landed.material,
+          groups: { ...landed.material.groups, $track: { ...landed.material.groups.$track, offsetY: round(exitOffset(ms)) } },
+        },
+      })),
+      events: [],
+    };
+  });
+
+  return {
+    ...base,
+    id: "addy-logo-wave-wordmark-replay",
+    durationMs,
+    tracks: [
+      ...exitTracks,
+      ...base.tracks.map((track) => ({
+        ...track,
+        timing: { start: shift(track.timing.start), end: shift(track.timing.end) },
+      })),
+    ],
+    markers: [{ id: "enter", at: enter }],
+  };
+}
+
+export function addyLogoWaveWordmarkReplaySamples() {
+  const scene = authorAddyLogoWaveWordmarkReplay(JSON.parse(fs.readFileSync(manifestPath, "utf8")));
+  const enter = scene.markers[0].at;
+  const exitMs = enter * scene.durationMs;
+  const at = (ms) => Math.round((ms / scene.durationMs) * 1000) / 1000;
+  const shifted = (progress) => Math.round((enter + progress * (1 - enter)) * 1000) / 1000;
+  const base = addyLogoWaveWordmarkSamples().samples;
+  const baseAt = (label) => base.find((sample) => sample.label === label).progress;
+  return {
+    schemaVersion: 1,
+    sceneId: "addy-logo-wave-wordmark-replay",
+    samples: [
+      { label: "wordmark-before-exit", progress: 0 },
+      { label: "y-lifting", progress: at(EXIT_LIFT_MS * 0.8) },
+      { label: "y-falling", progress: at(EXIT_LIFT_MS + EXIT_FALL_MS * 0.5) },
+      { label: "letters-falling", progress: at(3 * EXIT_STAGGER_MS + EXIT_LIFT_MS + EXIT_FALL_MS * 0.4) },
+      { label: "empty-beat", progress: at(exitMs - EXIT_BEAT_MS * 0.5) },
+      { label: "ticks-falling", progress: shifted(baseAt("ticks-falling")) },
+      { label: "first-step", progress: shifted(baseAt("first-step")) },
+      { label: "landing-settle", progress: shifted(baseAt("landing-settle")) },
+      { label: "endpoint-lock", progress: 1 },
+    ],
+  };
+}
+
 function validatedPoses(id, poses) {
   poses.forEach((pose, poseIndex) => {
     const previous = poses[poseIndex - 1];
@@ -1060,6 +1165,8 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
       [waveSamplesPath, waveSamplesPath, addyLogoWaveSamples()],
       [waveWordmarkScenePath, waveWordmarkScenePath, authorAddyLogoWaveWordmark(JSON.parse(fs.readFileSync(manifestPath, "utf8")))],
       [waveWordmarkSamplesPath, waveWordmarkSamplesPath, addyLogoWaveWordmarkSamples()],
+      [replayScenePath, replayScenePath, authorAddyLogoWaveWordmarkReplay(JSON.parse(fs.readFileSync(manifestPath, "utf8")))],
+      [replaySamplesPath, replaySamplesPath, addyLogoWaveWordmarkReplaySamples()],
     ]),
   ];
   for (const [out, committedPath, value] of outputs) {

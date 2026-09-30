@@ -6,6 +6,7 @@ import {
   proceduralDistance,
   signedDistanceRaster,
   signedDistanceToPreparedPath,
+  framePaintedTracks,
   trackPlacement,
   unplacePoint,
   type TrackPlacement,
@@ -417,10 +418,12 @@ function path2dFor(commands: readonly PathCommand[]): Path2D {
   return path;
 }
 
-function sharedTrackRenderMode(frame: LiquidFrameSampleV2): TrackFrame["renderMode"] | null {
-  const [first, ...rest] = frame.tracks;
-  if (!first) return null;
-  return rest.every((track) => track.renderMode === first.renderMode) ? first.renderMode : null;
+// True when every track shows an exact endpoint (each on its source or target
+// path, or all crossfading), so the frame can be drawn as vector paths.
+export function frameUsesExactEndpoints(frame: LiquidFrameSampleV2): boolean {
+  if (frame.tracks.length === 0) return false;
+  if (frame.tracks.every((track) => track.renderMode === "crossfade")) return true;
+  return frame.tracks.every((track) => track.renderMode === "sourcePath" || track.renderMode === "targetPath");
 }
 
 export class LiquidCanvasRenderer {
@@ -448,19 +451,19 @@ export class LiquidCanvasRenderer {
     const viewport = viewportFor(scene, width, height, viewportPadding);
     this.context.clearRect(0, 0, width, height);
     if (scene.schemaVersion === 2) {
-      const frameV2 = frame as LiquidFrameSampleV2;
-      const globalMode = sharedTrackRenderMode(frameV2);
+      const frameV2 = framePaintedTracks(scene, frame as LiquidFrameSampleV2);
       const opacity = normalizedOpacity(options.opacity);
-      if (globalMode === "sourcePath" || globalMode === "targetPath" || globalMode === "crossfade") {
+      if (frameUsesExactEndpoints(frameV2)) {
         this.beginTrackClip(scene, viewport);
         for (const track of frameV2.tracks) {
+          const mode = track.renderMode;
           const placement = trackPlacement(track);
           const place = (commands: readonly PathCommand[]) => placement ? placePath(commands, placement) : commands;
-          if (globalMode === "sourcePath" || globalMode === "crossfade") {
+          if (mode === "sourcePath" || mode === "crossfade") {
             const sourceCommands = place(transformPath(track.source.commands, track.source.transform));
             this.drawPath(sourceCommands, viewport, options.sourceStyle ?? options.fillStyle ?? "white", track.sourceOpacity * opacity, scene.fillRule);
           }
-          if (globalMode === "targetPath" || globalMode === "crossfade") {
+          if (mode === "targetPath" || mode === "crossfade") {
             const targetCommands = place(transformPath(track.target.commands, track.target.transform));
             this.drawPath(targetCommands, viewport, options.targetStyle ?? options.fillStyle ?? "white", track.targetOpacity * opacity, scene.fillRule);
           }

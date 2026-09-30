@@ -106,6 +106,8 @@ public final class LiquidMetalRenderer {
 
     public func canRender(scene: LiquidSceneV2, frame: LiquidFrameV2, width: Int, height: Int) -> Bool {
         guard width > 0, height > 0 else { return false }
+        // Tracks clipped away entirely paint nothing, so they do not take a slot.
+        let frame = LiquidSDF.framePaintedTracks(scene: scene, frame: frame)
         guard frame.tracks.count <= Self.maxTracks else { return false }
         var ribbonSegments = 0
         for track in frame.tracks {
@@ -123,6 +125,7 @@ public final class LiquidMetalRenderer {
 
     public func renderAlphaMask(scene: LiquidSceneV2, frame: LiquidFrameV2, width: Int, height: Int) -> LiquidAlphaMask? {
         guard canRender(scene: scene, frame: frame, width: width, height: height) else { return nil }
+        let frame = LiquidSDF.framePaintedTracks(scene: scene, frame: frame)
 
         let mapping = MetalScenePixelMapping(sceneSize: scene.coordinateSpace, width: width, height: height)
         let prepared = makeRenderBuffers(scene: scene, frame: frame, mapping: mapping)
@@ -214,7 +217,7 @@ public final class LiquidMetalRenderer {
         func endpointOffset(track: LiquidTrackFrame, role: String, endpoint: LiquidEndpoint, targetMix: Double) -> Int {
             if metalEndpointNeeded(track: track, role: role, targetMix: targetMix) {
                 let offset = endpointDistances.count
-                endpointDistances.append(contentsOf: cachedEndpointDistanceRaster(scene: scene, trackId: track.id, endpointRole: role, endpoint: endpoint, mapping: mapping).distances)
+                endpointDistances.append(contentsOf: cachedEndpointDistanceRaster(scene: scene, endpoint: endpoint, mapping: mapping).distances)
                 return offset
             }
             if let farOffset { return farOffset }
@@ -324,12 +327,10 @@ public final class LiquidMetalRenderer {
 
     private func cachedEndpointDistanceRaster(
         scene: LiquidSceneV2,
-        trackId: String,
-        endpointRole: String,
         endpoint: LiquidEndpoint,
         mapping: MetalScenePixelMapping
     ) -> MetalEndpointDistanceRaster {
-        let key = MetalEndpointDistanceRasterKey(scene: scene, trackId: trackId, endpointRole: endpointRole, endpoint: endpoint, width: mapping.width, height: mapping.height)
+        let key = MetalEndpointDistanceRasterKey(scene: scene, endpoint: endpoint, width: mapping.width, height: mapping.height)
         if let raster = rasterStore.raster(for: key) {
             return raster
         }
@@ -342,7 +343,7 @@ public final class LiquidMetalRenderer {
     // started blending toward their target, so they are ready before targetMix rises.
     private func warmTargetRasters(scene: LiquidSceneV2, frame: LiquidFrameV2, mapping: MetalScenePixelMapping) {
         for track in frame.tracks where track.renderMode == .field && LiquidSDF.prepareTrackField(track: track).targetMix == 0 {
-            let key = MetalEndpointDistanceRasterKey(scene: scene, trackId: track.id, endpointRole: "target", endpoint: track.target, width: mapping.width, height: mapping.height)
+            let key = MetalEndpointDistanceRasterKey(scene: scene, endpoint: track.target, width: mapping.width, height: mapping.height)
             guard rasterStore.beginWarming(key) else { continue }
             let store = rasterStore
             DispatchQueue.global(qos: .utility).async {
@@ -423,24 +424,21 @@ private struct MetalScenePixelMapping {
     }
 }
 
+// Keyed by the shape itself, so tracks drawing the same endpoint share one raster.
 private struct MetalEndpointDistanceRasterKey: Equatable {
     var sceneId: String
     var fixtureVersion: Int
     var fillRule: LiquidFillRule
     var coordinateSpace: LiquidSize
-    var trackId: String
-    var endpointRole: String
     var width: Int
     var height: Int
     var transformedCommands: [LiquidPathCommand]
 
-    init(scene: LiquidSceneV2, trackId: String, endpointRole: String, endpoint: LiquidEndpoint, width: Int, height: Int) {
+    init(scene: LiquidSceneV2, endpoint: LiquidEndpoint, width: Int, height: Int) {
         self.sceneId = scene.id
         self.fixtureVersion = scene.fixtureVersion
         self.fillRule = scene.fillRule
         self.coordinateSpace = scene.coordinateSpace
-        self.trackId = trackId
-        self.endpointRole = endpointRole
         self.width = width
         self.height = height
         self.transformedCommands = endpoint.transformedCommands

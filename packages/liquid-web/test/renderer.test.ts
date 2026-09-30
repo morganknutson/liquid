@@ -1,5 +1,5 @@
 import { describe, expect, test, vi } from "vitest";
-import { evaluateFrame, fieldDistance, signedDistanceRaster, signedDistanceToPreparedPath, type AnyLiquidScene, type LiquidFrameSample, type LiquidFrameSampleV2, type LiquidScene, type LiquidSceneV2, type Point } from "@liquid/core";
+import { evaluateFrame, fieldDistance, framePaintedTracks, trackIsClippedAway, signedDistanceRaster, signedDistanceToPreparedPath, type AnyLiquidScene, type LiquidFrameSample, type LiquidFrameSampleV2, type LiquidScene, type LiquidSceneV2, type Point } from "@liquid/core";
 import sampleManifestData from "../../../shared/golden/capsule-to-a.samples.json" with { type: "json" };
 import sampleManifestFullData from "../../../shared/golden/spinner-to-addy.samples.json" with { type: "json" };
 import sampleManifestV2Data from "../../../shared/golden/spinner-to-ad.samples.json" with { type: "json" };
@@ -8,9 +8,10 @@ import visualGoldenFullData from "../../../shared/golden/spinner-to-addy.visual.
 import visualGoldenV2Data from "../../../shared/golden/spinner-to-ad.visual.json" with { type: "json" };
 import sceneData from "../../../shared/scenes/capsule-to-a.v1.json" with { type: "json" };
 import sceneFullData from "../../../shared/scenes/spinner-to-addy.v2.json" with { type: "json" };
+import sceneReplayData from "../../../shared/scenes/addy-logo-wave-wordmark-replay.v2.json" with { type: "json" };
 import waveSceneData from "../../../shared/scenes/addy-logo-wave.v2.json" with { type: "json" };
 import sceneV2Data from "../../../shared/scenes/spinner-to-ad.v2.json" with { type: "json" };
-import { LiquidCanvasRenderer, deviceToScene, rasterizeFrame, viewportFor, type RasterResult } from "../src/index.js";
+import { LiquidCanvasRenderer, LiquidWebGLRenderer, deviceToScene, rasterizeFrame, viewportFor, type RasterResult } from "../src/index.js";
 
 vi.mock("@liquid/core", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@liquid/core")>();
@@ -536,6 +537,22 @@ describe("Liquid web renderer", () => {
         const expectedAlpha = decodeAlphaBase64(expected.alphaBase64);
         expect(mask.alpha, `${sample.label} ${resolution.width}x${resolution.height}`).toEqual(expectedAlpha);
       }
+    }
+  });
+
+  test("skips tracks clipped away entirely, so the replay logo fits the GPU on every frame", () => {
+    const scene = sceneReplayData as unknown as LiquidSceneV2;
+    expect(scene.tracks.length).toBeGreaterThan(8);
+    expect(LiquidWebGLRenderer.supportsScene(scene)).toBe(true);
+    const enter = scene.markers![0]!.at;
+    // Letters at rest are painted; once they have dropped out of the pill they are not.
+    const resting = evaluateFrame(scene, 0).tracks.find((track) => track.id === "exit-y")!;
+    const dropped = evaluateFrame(scene, enter).tracks.find((track) => track.id === "exit-y")!;
+    expect(trackIsClippedAway(scene, resting)).toBe(false);
+    expect(trackIsClippedAway(scene, dropped)).toBe(true);
+    for (let step = 0; step <= 200; step += 1) {
+      const painted = framePaintedTracks(scene, evaluateFrame(scene, step / 200));
+      expect(painted.tracks.length).toBeLessThanOrEqual(8);
     }
   });
 });

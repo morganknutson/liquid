@@ -11,6 +11,7 @@ public enum LiquidBundledScene: String, CaseIterable, Sendable {
     case spinnerToAddy = "spinner-to-addy"
     case addyLogoWave = "addy-logo-wave"
     case addyLogoWaveWordmark = "addy-logo-wave-wordmark"
+    case addyLogoWaveWordmarkReplay = "addy-logo-wave-wordmark-replay"
 
     public var sceneFileName: String {
         switch self {
@@ -24,6 +25,8 @@ public enum LiquidBundledScene: String, CaseIterable, Sendable {
             return "addy-logo-wave.v2.json"
         case .addyLogoWaveWordmark:
             return "addy-logo-wave-wordmark.v2.json"
+        case .addyLogoWaveWordmarkReplay:
+            return "addy-logo-wave-wordmark-replay.v2.json"
         }
     }
 
@@ -39,6 +42,8 @@ public enum LiquidBundledScene: String, CaseIterable, Sendable {
             return "addy-logo-wave.samples.json"
         case .addyLogoWaveWordmark:
             return "addy-logo-wave-wordmark.samples.json"
+        case .addyLogoWaveWordmarkReplay:
+            return "addy-logo-wave-wordmark-replay.samples.json"
         }
     }
 }

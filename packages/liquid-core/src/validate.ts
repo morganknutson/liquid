@@ -252,6 +252,18 @@ export function validateSceneV2(value: unknown): asserts value is LiquidSceneV2 
     assertFinite(value.loop.start, "scene.loop.start");
     if (value.loop.start < 0 || value.loop.start >= 1) throw new Error("scene.loop.start must satisfy 0 <= start < 1");
   }
+  if (value.markers !== undefined) {
+    if (!Array.isArray(value.markers)) throw new Error("scene.markers must be an array");
+    const markerIds = new Set<string>();
+    value.markers.forEach((marker, index) => {
+      const markerPath = `scene.markers[${index}]`;
+      if (!isRecord(marker) || typeof marker.id !== "string" || marker.id.length === 0) throw new Error(`${markerPath}.id must be a non-empty string`);
+      if (markerIds.has(marker.id)) throw new Error(`${markerPath}.id duplicates ${marker.id}`);
+      markerIds.add(marker.id);
+      assertFinite(marker.at, `${markerPath}.at`);
+      if (marker.at < 0 || marker.at > 1) throw new Error(`${markerPath}.at must satisfy 0 <= at <= 1`);
+    });
+  }
 
   const trackIds = new Set<string>();
   value.tracks.forEach((track, trackIndex) => {
@@ -271,6 +283,7 @@ export function validateSceneV2(value: unknown): asserts value is LiquidSceneV2 
     if (track.interpolation !== undefined && (typeof track.interpolation !== "string" || !interpolations.has(track.interpolation))) {
       throw new Error(`${trackPath}.interpolation must be keyframeEasing or monotoneCubic`);
     }
+    if (track.rigid !== undefined && typeof track.rigid !== "boolean") throw new Error(`${trackPath}.rigid must be a boolean`);
 
     if (!Array.isArray(track.components) || track.components.length === 0) throw new Error(`${trackPath}.components must not be empty`);
     const definitions = new Map<string, ComponentDefinition>();

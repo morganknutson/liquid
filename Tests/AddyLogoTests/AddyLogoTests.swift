@@ -103,6 +103,37 @@ struct AddyLogoTests {
         #expect(frame.tracks.allSatisfy { $0.renderMode == .targetPath })
     }
 
+    @Test func waveThenWordmarkReplayStartsAtTheTicksAndDropsTheLettersWhenClicked() async throws {
+        let controller = try AddyLogoController(variant: .waveThenWordmarkReplay)
+        let player = controller.player
+        player.setReducedMotionOverride(.disabled)
+        let scene = try #require(player.sceneV2)
+        let enter = try #require(scene.markers?.first { $0.id == "enter" }?.at)
+        #expect(scene.id == "addy-logo-wave-wordmark-replay")
+        #expect(controller.replaysOnClick)
+        controller.replay()
+        #expect(abs(player.progress - enter) < 1e-9)
+        // Clicking does nothing until the logo has finished.
+        #expect(!controller.dropAndReplay())
+
+        player.pause()
+        controller.showWordmark()
+        #expect(controller.dropAndReplay())
+        #expect(player.progress == 0)
+        #expect(player.isPlaying)
+        let exits = try #require(player.frameV2).tracks.filter { $0.id.hasPrefix("exit-") }
+        #expect(exits.map(\.target.shapeId) == ["letter-y", "letter-d2", "letter-d1", "letter-a"])
+        #expect(exits.allSatisfy { $0.renderMode == .targetPath })
+    }
+
+    @Test func onlyTheReplayVariantReplaysOnClick() throws {
+        let controller = try AddyLogoController(variant: .waveThenWordmark)
+        controller.showWordmark()
+        #expect(!controller.replaysOnClick)
+        #expect(!controller.dropAndReplay())
+        #expect(controller.player.progress == 1)
+    }
+
     @Test func reducedMotionHoldsTheWaveInsteadOfLooping() throws {
         let controller = try AddyLogoController(variant: .wave)
         let player = controller.player

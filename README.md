@@ -28,7 +28,7 @@ The project intentionally keeps native evaluators over one shared data contract.
 
 ## Use the Addy logo
 
-Three variations share the same drop-in: the ticks become the wordmark (default); they run Addy's pill wave on loop (`variant="wave"` / `AddyLogoView(variant: .wave)`); or they wave three times and then become the wordmark (`variant="wave-wordmark"` / `AddyLogoView(variant: .waveThenWordmark)`). On a website, register the element once and place it anywhere; children are shown until the animation is ready:
+Four variations share the same drop-in: the ticks become the wordmark (default); they run Addy's pill wave on loop (`variant="wave"` / `AddyLogoView(variant: .wave)`); they wave three times and then become the wordmark (`variant="wave-wordmark"` / `AddyLogoView(variant: .waveThenWordmark)`); or the same, where clicking the finished logo drops the letters out of the pill and plays it again (`variant="wave-wordmark-replay"` / `AddyLogoView(variant: .waveThenWordmarkReplay)`). On a website, register the element once and place it anywhere; children are shown until the animation is ready:
 
 ```html
 <addy-logo style="width: 320px"><img src="/addy-logo.svg" alt="Addy" /></addy-logo>

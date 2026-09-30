@@ -714,3 +714,53 @@ public struct LiquidTrackPlacement: Equatable, Sendable {
         )
     }
 }
+
+extension LiquidSDF {
+    /// True when the track shows an exact endpoint that lies entirely outside the
+    /// scene's clip, so it paints nothing this frame (for example a shape waiting
+    /// above a frame, or one that has dropped out of it). Renderers can skip it.
+    public static func trackIsClippedAway(scene: LiquidSceneV2, track: LiquidTrackFrame) -> Bool {
+        guard let clip = scene.clip, track.renderMode == .sourcePath || track.renderMode == .targetPath,
+              let clipBounds = commandBounds(clip.transformedCommands),
+              let bounds = commandBounds((track.renderMode == .sourcePath ? track.source : track.target).transformedCommands)
+        else { return false }
+        var placed = bounds
+        if let placement = trackPlacement(track: track) {
+            placed = (
+                minX: placement.originX + (bounds.minX - placement.originX) * placement.scale + placement.offsetX,
+                minY: placement.originY + (bounds.minY - placement.originY) * placement.scale + placement.offsetY,
+                maxX: placement.originX + (bounds.maxX - placement.originX) * placement.scale + placement.offsetX,
+                maxY: placement.originY + (bounds.maxY - placement.originY) * placement.scale + placement.offsetY
+            )
+        }
+        return placed.maxX < clipBounds.minX || placed.minX > clipBounds.maxX || placed.maxY < clipBounds.minY || placed.minY > clipBounds.maxY
+    }
+
+    /// The frame without tracks that are clipped away entirely (see `trackIsClippedAway`).
+    public static func framePaintedTracks(scene: LiquidSceneV2, frame: LiquidFrameV2) -> LiquidFrameV2 {
+        let tracks = frame.tracks.filter { !trackIsClippedAway(scene: scene, track: $0) }
+        guard tracks.count != frame.tracks.count else { return frame }
+        var painted = frame
+        painted.tracks = tracks
+        return painted
+    }
+
+    // Bounds of a path's points, including curve control points (so they contain the curve).
+    private static func commandBounds(_ commands: [LiquidPathCommand]) -> (minX: Double, minY: Double, maxX: Double, maxY: Double)? {
+        var points: [(Double, Double)] = []
+        for command in commands {
+            switch command {
+            case let .move(x, y), let .line(x, y):
+                points.append((x, y))
+            case let .cubic(x1, y1, x2, y2, x, y):
+                points.append(contentsOf: [(x1, y1), (x2, y2), (x, y)])
+            case .close:
+                break
+            }
+        }
+        guard let first = points.first else { return nil }
+        return points.reduce((minX: first.0, minY: first.1, maxX: first.0, maxY: first.1)) { bounds, point in
+            (minX: min(bounds.minX, point.0), minY: min(bounds.minY, point.1), maxX: max(bounds.maxX, point.0), maxY: max(bounds.maxY, point.1))
+        }
+    }
+}

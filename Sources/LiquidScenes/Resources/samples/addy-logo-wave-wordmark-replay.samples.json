@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "sceneId": "addy-logo-wave-wordmark-replay",
+  "samples": [
+    {
+      "label": "wordmark-before-exit",
+      "progress": 0
+    },
+    {
+      "label": "y-lifting",
+      "progress": 0.017
+    },
+    {
+      "label": "y-falling",
+      "progress": 0.053
+    },
+    {
+      "label": "letters-falling",
+      "progress": 0.089
+    },
+    {
+      "label": "empty-beat",
+      "progress": 0.143
+    },
+    {
+      "label": "ticks-falling",
+      "progress": 0.208
+    },
+    {
+      "label": "first-step",
+      "progress": 0.482
+    },
+    {
+      "label": "landing-settle",
+      "progress": 0.95
+    },
+    {
+      "label": "endpoint-lock",
+      "progress": 1
+    }
+  ]
+}

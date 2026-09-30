@@ -23,6 +23,8 @@ export {
   targetDistance,
   trackFieldDistance,
   trackPlacement,
+  framePaintedTracks,
+  trackIsClippedAway,
   unplacePoint,
 } from "./sdf.js";
 export { validateSampleManifest, validateScene, validateSceneV1, validateSceneV2 } from "./validate.js";
@@ -48,6 +50,7 @@ export type {
   LiquidFrameSampleV2,
   LiquidScene,
   LiquidSceneV2,
+  SceneMarker,
   LiquidTrack,
   MaterialScalar,
   MaterialValues,

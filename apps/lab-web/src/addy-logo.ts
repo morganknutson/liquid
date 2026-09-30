@@ -41,3 +41,13 @@ document.querySelector("#wave-wordmark-replay")?.addEventListener("click", () =>
   if (waveWordmarkStatus) waveWordmarkStatus.textContent = "playing";
   waveWordmark?.replay();
 });
+
+const replayable = document.querySelector<HTMLElement>("#replayable");
+const replayableStatus = document.querySelector<HTMLElement>("#replayable-status");
+replayable?.addEventListener("complete", () => {
+  if (replayableStatus) replayableStatus.textContent = "complete";
+  replayable.dataset.completed = String(Number(replayable.dataset.completed ?? 0) + 1);
+});
+replayable?.addEventListener("click", () => {
+  if (replayableStatus?.textContent === "complete") replayableStatus.textContent = "playing";
+});

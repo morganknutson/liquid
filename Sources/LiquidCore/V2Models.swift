@@ -257,6 +257,9 @@ public struct LiquidTrack: Codable, Equatable, Sendable {
     public var target: LiquidEndpoint
     public var timing: LiquidTrackTiming
     public var interpolation: LiquidTrackInterpolation?
+    /// When true, the track always draws its exact target shape, moved by its `$track`
+    /// placement, instead of a liquid field.
+    public var rigid: Bool?
     public var components: [LiquidComponentDefinition]
     public var keyframes: [LiquidTrackKeyframe]
     public var events: [LiquidSemanticEvent]?
@@ -267,6 +270,7 @@ public struct LiquidTrack: Codable, Equatable, Sendable {
         target: LiquidEndpoint,
         timing: LiquidTrackTiming,
         interpolation: LiquidTrackInterpolation? = nil,
+        rigid: Bool? = nil,
         components: [LiquidComponentDefinition],
         keyframes: [LiquidTrackKeyframe],
         events: [LiquidSemanticEvent]? = nil
@@ -276,6 +280,7 @@ public struct LiquidTrack: Codable, Equatable, Sendable {
         self.target = target
         self.timing = timing
         self.interpolation = interpolation
+        self.rigid = rigid
         self.components = components
         self.keyframes = keyframes
         self.events = events
@@ -287,6 +292,17 @@ public struct LiquidSceneLoop: Codable, Equatable, Sendable {
 
     public init(start: Double) {
         self.start = start
+    }
+}
+
+/// A named point in normalized progress that hosts can seek to.
+public struct LiquidSceneMarker: Codable, Equatable, Sendable {
+    public var id: String
+    public var at: Double
+
+    public init(id: String, at: Double) {
+        self.id = id
+        self.at = at
     }
 }
 
@@ -304,6 +320,8 @@ public struct LiquidSceneV2: Codable, Equatable, Sendable {
     public var clip: LiquidEndpoint?
     /// When present, looping playback wraps back to `start` instead of 0, so an intro plays once.
     public var loop: LiquidSceneLoop?
+    /// Named points in normalized progress, e.g. where the main animation starts after an outro.
+    public var markers: [LiquidSceneMarker]?
     public var reducedMotion: LiquidReducedMotion
 
     private enum CodingKeys: String, CodingKey {
@@ -317,6 +335,7 @@ public struct LiquidSceneV2: Codable, Equatable, Sendable {
         case backdrop
         case clip
         case loop
+        case markers
         case reducedMotion
     }
 
@@ -331,6 +350,7 @@ public struct LiquidSceneV2: Codable, Equatable, Sendable {
         backdrop: [LiquidEndpoint]? = nil,
         clip: LiquidEndpoint? = nil,
         loop: LiquidSceneLoop? = nil,
+        markers: [LiquidSceneMarker]? = nil,
         reducedMotion: LiquidReducedMotion
     ) {
         self.schemaVersion = schemaVersion
@@ -343,6 +363,7 @@ public struct LiquidSceneV2: Codable, Equatable, Sendable {
         self.backdrop = backdrop
         self.clip = clip
         self.loop = loop
+        self.markers = markers
         self.reducedMotion = reducedMotion
     }
 }

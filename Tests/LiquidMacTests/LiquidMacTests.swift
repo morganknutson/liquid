@@ -393,7 +393,7 @@ struct LiquidMacTests {
         }
     }
 
-    @Test(arguments: ["addy-logo-wave", "addy-logo-wave-wordmark"])
+    @Test(arguments: ["addy-logo-wave", "addy-logo-wave-wordmark", "addy-logo-wave-wordmark-replay"])
     func rendererMatchesSharedAddyLogoWaveVisualGoldens(sceneName: String) throws {
         let root = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
         let scene = try LiquidLoader.loadSceneV2(from: root.appendingPathComponent("shared/scenes/\(sceneName).v2.json"))
@@ -510,6 +510,20 @@ struct LiquidMacTests {
         let scene = v2RendererScene(componentCount: LiquidMetalRenderer.maxComponentsPerTrack + 1)
         let frame = try LiquidEvaluator().evaluateChecked(scene: scene, progress: 0.5)
         #expect(!renderer.canRender(scene: scene, frame: frame, width: 64, height: 64))
+    }
+
+    @Test func metalRendererSkipsClippedAwayTracksSoTheReplayLogoFits() throws {
+        let root = URL(fileURLWithPath: FileManager.default.currentDirectoryPath, isDirectory: true)
+        let scene = try LiquidLoader.loadSceneV2(from: root.appendingPathComponent("shared/scenes/addy-logo-wave-wordmark-replay.v2.json"))
+        #expect(scene.tracks.count > LiquidMetalRenderer.maxTracks)
+        let evaluator = LiquidEvaluator()
+        for step in 0...100 {
+            let frame = try evaluator.evaluateChecked(scene: scene, progress: Double(step) / 100)
+            #expect(LiquidSDF.framePaintedTracks(scene: scene, frame: frame).tracks.count <= LiquidMetalRenderer.maxTracks)
+            if let renderer = LiquidMetalRenderer() {
+                #expect(renderer.canRender(scene: scene, frame: frame, width: 132, height: 70))
+            }
+        }
     }
 
     @Test func metalRendererProducesNonemptyV2RenderModes() throws {

@@ -21,6 +21,7 @@
     "./spinner-to-addy": "./scenes/spinner-to-addy.v2.json",
     "./addy-logo-wave": "./scenes/addy-logo-wave.v2.json",
     "./addy-logo-wave-wordmark": "./scenes/addy-logo-wave-wordmark.v2.json",
+    "./addy-logo-wave-wordmark-replay": "./scenes/addy-logo-wave-wordmark-replay.v2.json",
     "./assets/manifest": "./assets/manifest.json",
     "./assets/*": "./assets/*",
     "./samples/capsule-to-a": "./samples/capsule-to-a.samples.json",
@@ -28,6 +29,7 @@
     "./samples/spinner-to-addy": "./samples/spinner-to-addy.samples.json",
     "./samples/addy-logo-wave": "./samples/addy-logo-wave.samples.json",
     "./samples/addy-logo-wave-wordmark": "./samples/addy-logo-wave-wordmark.samples.json",
+    "./samples/addy-logo-wave-wordmark-replay": "./samples/addy-logo-wave-wordmark-replay.samples.json",
     "./resources/manifest": "./resources.manifest.json"
   },
   "scripts": {

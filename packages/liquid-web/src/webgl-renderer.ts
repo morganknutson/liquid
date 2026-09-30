@@ -1,5 +1,6 @@
 import {
   signedDistanceRasterSteps,
+  framePaintedTracks,
   trackPlacement,
   transformPath,
   preparePath,
@@ -15,6 +16,7 @@ import {
 } from "@liquid/core";
 import {
   LiquidCanvasRenderer,
+  frameUsesExactEndpoints,
   viewportFor,
   type CanvasRenderOptions,
   type ViewportTransform,
@@ -375,21 +377,10 @@ function operationValue(operation: ComponentFrame["operation"]): number {
   return operation === "subtract" ? 1 : 0;
 }
 
-function sharedTrackRenderMode(frame: LiquidFrameSampleV2): TrackFrame["renderMode"] | null {
-  const [first, ...rest] = frame.tracks;
-  if (!first) return null;
-  return rest.every((track) => track.renderMode === first.renderMode) ? first.renderMode : null;
-}
-
 function frameComponentCount(frame: LiquidFrameSampleV2): number {
   let count = 0;
   for (const track of frame.tracks) count += track.components.length;
   return count;
-}
-
-function canUseExact2DEndpoint(frame: LiquidFrameSampleV2): boolean {
-  const mode = sharedTrackRenderMode(frame);
-  return mode === "sourcePath" || mode === "targetPath" || mode === "crossfade";
 }
 
 function compileShader(gl: WebGL2RenderingContext, type: number, source: string): WebGLShader {
@@ -543,10 +534,14 @@ export class LiquidWebGLRenderer extends LiquidCanvasRenderer {
     return capabilities;
   }
 
+  // Rigid tracks are left out: they only show exact shapes, drawn as 2D paths
+  // or clipped away, and frames that still need too many tracks fall back to
+  // the CPU renderer.
   static supportsScene(scene: LiquidSceneV2): boolean {
-    if (scene.tracks.length > MAX_TRACKS) return false;
+    const liquid = scene.tracks.filter((track) => track.rigid !== true);
+    if (liquid.length > MAX_TRACKS) return false;
     let components = 0;
-    for (const track of scene.tracks) components += track.components.length;
+    for (const track of liquid) components += track.components.length;
     return components <= MAX_COMPONENTS;
   }
 
@@ -576,8 +571,9 @@ export class LiquidWebGLRenderer extends LiquidCanvasRenderer {
       super.render(scene as LiquidScene, frame as LiquidFrameSample, options);
       return;
     }
-    const frameV2 = frame as LiquidFrameSampleV2;
-    if (!this.capabilities.supported || !this.#gl || !this.#program || !LiquidWebGLRenderer.supportsScene(scene) || frameComponentCount(frameV2) > MAX_COMPONENTS || canUseExact2DEndpoint(frameV2)) {
+    // Tracks clipped away entirely paint nothing, so they do not take a GPU slot.
+    const frameV2 = framePaintedTracks(scene, frame as LiquidFrameSampleV2);
+    if (!this.capabilities.supported || !this.#gl || !this.#program || !LiquidWebGLRenderer.supportsScene(scene) || frameV2.tracks.length > MAX_TRACKS || frameComponentCount(frameV2) > MAX_COMPONENTS || frameUsesExactEndpoints(frameV2)) {
       super.render(scene, frameV2, options);
       return;
     }
@@ -759,7 +755,9 @@ export class LiquidWebGLRenderer extends LiquidCanvasRenderer {
     this.#sourceTexture = this.uploadTextureLayers(this.#sourceTexture, sourceRasters, width, height);
     this.#targetTexture = this.uploadTextureLayers(this.#targetTexture, targetRasters, width, height);
 
-    const activeTrackIds = new Set(frame.tracks.map((track) => track.id));
+    // Keep rasters for every track in the scene, including ones clipped away
+    // this frame, so replays reuse them instead of rebuilding and re-uploading.
+    const activeTrackIds = new Set(scene.tracks.map((track) => track.id));
     for (const trackId of this.#sourceDistanceRasters.keys()) if (!activeTrackIds.has(trackId)) this.#sourceDistanceRasters.delete(trackId);
     for (const trackId of this.#targetDistanceRasters.keys()) if (!activeTrackIds.has(trackId)) this.#targetDistanceRasters.delete(trackId);
   }

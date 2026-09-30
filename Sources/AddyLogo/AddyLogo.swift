@@ -20,12 +20,16 @@ public enum AddyLogoVariant: Sendable {
     case wave
     /// Waves three times, then flows into the Addy wordmark and holds.
     case waveThenWordmark
+    /// Plays like `waveThenWordmark`; clicking the finished logo drops the letters
+    /// out of the pill (y first) and plays it again.
+    case waveThenWordmarkReplay
 
     var bundledScene: LiquidBundledScene {
         switch self {
         case .wordmark: return .spinnerToAddy
         case .wave: return .addyLogoWave
         case .waveThenWordmark: return .addyLogoWaveWordmark
+        case .waveThenWordmarkReplay: return .addyLogoWaveWordmarkReplay
         }
     }
 }
@@ -38,6 +42,10 @@ public final class AddyLogoController: ObservableObject {
     /// True once a non-looping play has reached the wordmark.
     @Published public private(set) var isComplete = false
 
+    /// True when clicking the finished logo drops the letters and plays again.
+    public let replaysOnClick: Bool
+    /// Where plays start: the scene's "enter" marker, after the replay's letter drop.
+    private let enter: Double
     private var completionHandlers: [UUID: () -> Void] = [:]
     private var cancellable: AnyCancellable?
 
@@ -49,6 +57,9 @@ public final class AddyLogoController: ObservableObject {
             throw LiquidValidationError.invalidScene("The bundled Addy logo scene must be schema v2")
         }
         player = try LiquidPlayer(scene: scene, options: LiquidPlaybackOptions(autoplay: false, loop: loop ?? (variant == .wave), reducedMotion: .system))
+        replaysOnClick = variant == .waveThenWordmarkReplay
+        enter = scene.markers?.first { $0.id == "enter" }?.at ?? 0
+        if startProgress > 0 { player.seek(progress: startProgress) }
         cancellable = player.$isPlaying.dropFirst().sink { [weak self] isPlaying in
             Task { @MainActor in self?.playbackChanged(isPlaying: isPlaying) }
         }
@@ -57,6 +68,7 @@ public final class AddyLogoController: ObservableObject {
     /// Plays from the current position, or from the empty pill after completing.
     public func play() {
         isComplete = false
+        if player.progress >= 1, !player.options.loop { player.seek(progress: startProgress) }
         player.play()
     }
 
@@ -67,7 +79,25 @@ public final class AddyLogoController: ObservableObject {
     /// Plays again from the empty pill.
     public func replay() {
         isComplete = false
-        player.restart()
+        player.seek(progress: startProgress)
+        player.play()
+    }
+
+    /// For `.waveThenWordmarkReplay`: once the logo has finished, drops the letters
+    /// out of the pill and plays again. This is what clicking the view does.
+    /// Returns whether it started.
+    @discardableResult
+    public func dropAndReplay() -> Bool {
+        guard replaysOnClick, !player.isPlaying, player.progress >= 1, !player.usesReducedMotion else { return false }
+        isComplete = false
+        player.seek(progress: 0)
+        player.play()
+        return true
+    }
+
+    // Reduced motion plays the whole scene as a short fade, so it starts at 0.
+    private var startProgress: Double {
+        player.usesReducedMotion ? 0 : enter
     }
 
     /// Shows the finished wordmark without animating.
@@ -178,6 +208,7 @@ private struct AddyLogoPlayerView: View {
             backingOptions: LiquidBackingScaleOptions(maxScale: 2, maxBackingDimension: 1600),
             renderStyle: renderStyle
         )
+        .modifier(ReplayOnClick(controller: controller))
         .onAppear {
             if let onComplete {
                 completionHandler = controller.onComplete(onComplete)
@@ -210,5 +241,21 @@ private struct AddyLogoPlayerView: View {
             }
         }
         return components
+    }
+}
+
+/// Clicking the finished `.waveThenWordmarkReplay` logo drops the letters and plays again.
+private struct ReplayOnClick: ViewModifier {
+    let controller: AddyLogoController
+
+    func body(content: Content) -> some View {
+        if controller.replaysOnClick {
+            content
+                .contentShape(Rectangle())
+                .onTapGesture { controller.dropAndReplay() }
+                .accessibilityAction(named: "Replay") { controller.dropAndReplay() }
+        } else {
+            content
+        }
     }
 }

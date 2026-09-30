@@ -54,6 +54,14 @@
       "sha256": "994d84c6552e29718701c9bf8ec2ee86db0cf2e1930eb7443d83c5cdafeae4fc"
     },
     {
+      "kind": "scene",
+      "id": "addy-logo-wave-wordmark-replay",
+      "source": "shared/scenes/addy-logo-wave-wordmark-replay.v2.json",
+      "output": "scenes/addy-logo-wave-wordmark-replay.v2.json",
+      "byteLength": 1520340,
+      "sha256": "edd129f902837837e9655dd0dd6c4bf434bedea3cd6bf806b5f44a0e6422df5c"
+    },
+    {
       "kind": "sampleManifest",
       "id": "capsule-to-a",
       "source": "shared/golden/capsule-to-a.samples.json",
@@ -92,6 +100,14 @@
       "output": "samples/addy-logo-wave-wordmark.samples.json",
       "byteLength": 683,
       "sha256": "1cd7461efd84e84355a06bbb0926e801eee0c3eb384f763ff53ace994dd7e8ce"
+    },
+    {
+      "kind": "sampleManifest",
+      "id": "addy-logo-wave-wordmark-replay",
+      "source": "shared/golden/addy-logo-wave-wordmark-replay.samples.json",
+      "output": "samples/addy-logo-wave-wordmark-replay.samples.json",
+      "byteLength": 699,
+      "sha256": "84e12d4cf926df45226288262c4bd7b5feea48acb0e77227aa0797f91014200f"
     },
     {
       "kind": "assetManifest",

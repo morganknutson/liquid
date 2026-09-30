@@ -438,6 +438,27 @@ describe("Liquid evaluator", () => {
     expect(() => validateSceneV2({ ...v2Scene, loop: { start: -0.1 } })).toThrow("scene.loop.start");
   });
 
+  test("rigid tracks always show their exact target, moved by placement", () => {
+    const [track] = v2Scene.tracks;
+    const rigid = { ...v2Scene, tracks: [{ ...track!, rigid: true }] };
+    expect(() => validateSceneV2(rigid)).not.toThrow();
+    expect(() => validateSceneV2({ ...v2Scene, tracks: [{ ...track!, rigid: "yes" }] })).toThrow("rigid must be a boolean");
+    for (const progress of [0, 0.5, 1]) {
+      const frame = evaluateFrame(rigid, progress).tracks[0]!;
+      expect(frame.renderMode).toBe("targetPath");
+      expect(frame.targetOpacity).toBe(1);
+      expect(frame.endpointCommands).toEqual(track!.target.commands);
+    }
+    expect(evaluateFrame(rigid, 0.5, { reducedMotion: true }).tracks[0]!.renderMode).toBe("crossfade");
+  });
+
+  test("validates scene markers", () => {
+    expect(() => validateSceneV2({ ...v2Scene, markers: [{ id: "intro", at: 0.3 }, { id: "end", at: 1 }] })).not.toThrow();
+    expect(() => validateSceneV2({ ...v2Scene, markers: [{ id: "intro", at: 1.2 }] })).toThrow("scene.markers[0].at");
+    expect(() => validateSceneV2({ ...v2Scene, markers: [{ id: "", at: 0.2 }] })).toThrow("scene.markers[0].id");
+    expect(() => validateSceneV2({ ...v2Scene, markers: [{ id: "a", at: 0.2 }, { id: "a", at: 0.4 }] })).toThrow("scene.markers[1].id");
+  });
+
   test("keeps full Addy motion continuous without authored teleports", () => {
     for (const track of fullAddyScene.tracks) {
       expect(track.interpolation).toBe("monotoneCubic");

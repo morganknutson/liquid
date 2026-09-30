@@ -77,8 +77,8 @@ The complete `spinner-to-addy` scene has separate parity and visual-golden gates
 
 Use CPU when you need oracle behavior, parity diagnostics, deterministic alpha golden generation, or unsupported environments.
 
-Use WebGL2 on the web for v2 scenes when `LiquidCanvasPlayer.chosenBackend` resolves to `"webgl2"`. Capacity is 8 tracks and 48 total components.
+Use WebGL2 on the web for v2 scenes when `LiquidCanvasPlayer.chosenBackend` resolves to `"webgl2"`. Capacity is 8 tracks and 48 total components, not counting rigid tracks; tracks clipped away entirely are skipped per frame, and a frame that still needs more falls back to the CPU renderer.
 
-Use Metal on macOS for v2 scenes when `LiquidPlayerRenderStyle.backend` is `.auto` or `.metal` and `selectedRendererBackend` resolves to `.metal`. Capacity is 8 tracks, 16 components per track, and 4096 ribbon segments.
+Use Metal on macOS for v2 scenes when `LiquidPlayerRenderStyle.backend` is `.auto` or `.metal` and `selectedRendererBackend` resolves to `.metal`. Capacity is 8 painted tracks per frame (tracks clipped away entirely are skipped), 16 components per track, and 4096 ribbon segments.
 
 Keep backing dimensions capped for UI playback. The current examples use `maxBackingDimension: 384` on the web and `LiquidBackingScaleOptions(maxScale: 2, maxBackingDimension: 512)` on macOS.

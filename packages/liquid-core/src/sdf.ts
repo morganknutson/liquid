@@ -1,5 +1,5 @@
 import { preparePath, signedDistanceToPath, signedDistanceToPreparedPath, transformPath, type PreparedPath } from "./path.js";
-import type { Capsule, ComponentFrame, CubicRibbon, Ellipse, LiquidFrameSample, LiquidScene, Point, Primitive, TrackFrame } from "./types.js";
+import type { Capsule, ComponentFrame, CubicRibbon, Ellipse, Endpoint, LiquidFrameSample, LiquidFrameSampleV2, LiquidScene, LiquidSceneV2, PathCommand, Point, Primitive, TrackFrame } from "./types.js";
 
 export const RIBBON_SUBDIVISIONS = 32;
 
@@ -267,4 +267,66 @@ export function unplacePoint(point: Point, placement: TrackPlacement, into: { x:
   into.x = placement.originX + (point.x - placement.originX - placement.offsetX) / placement.scale;
   into.y = placement.originY + (point.y - placement.originY - placement.offsetY) / placement.scale;
   return into;
+}
+
+interface Bounds {
+  readonly minX: number;
+  readonly minY: number;
+  readonly maxX: number;
+  readonly maxY: number;
+}
+
+// Bounds of a path's points, including curve control points (so they contain the curve).
+function commandBounds(commands: readonly PathCommand[]): Bounds | null {
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  for (const command of commands) {
+    if (command.type === "Z") continue;
+    for (let index = 0; index + 1 < command.values.length; index += 2) {
+      const x = command.values[index]!;
+      const y = command.values[index + 1]!;
+      minX = Math.min(minX, x);
+      minY = Math.min(minY, y);
+      maxX = Math.max(maxX, x);
+      maxY = Math.max(maxY, y);
+    }
+  }
+  return minX <= maxX ? { minX, minY, maxX, maxY } : null;
+}
+
+const clipBoundsCache = new WeakMap<Endpoint, Bounds | null>();
+
+function endpointBounds(endpoint: Endpoint): Bounds | null {
+  return commandBounds(transformPath(endpoint.commands, endpoint.transform));
+}
+
+/**
+ * True when the track shows an exact endpoint that lies entirely outside the
+ * scene's clip, so it paints nothing this frame (for example a shape waiting
+ * above a frame, or one that has dropped out of it). Renderers can skip it.
+ */
+export function trackIsClippedAway(scene: LiquidSceneV2, track: TrackFrame): boolean {
+  if (!scene.clip || (track.renderMode !== "sourcePath" && track.renderMode !== "targetPath")) return false;
+  let clip = clipBoundsCache.get(scene.clip);
+  if (clip === undefined) {
+    clip = endpointBounds(scene.clip);
+    clipBoundsCache.set(scene.clip, clip);
+  }
+  const endpoint = endpointBounds(track.renderMode === "sourcePath" ? track.source : track.target);
+  if (!clip || !endpoint) return false;
+  const placement = trackPlacement(track);
+  const place = (value: number, origin: number, offset: number) => placement ? origin + (value - origin) * placement.scale + offset : value;
+  const minX = place(endpoint.minX, placement?.originX ?? 0, placement?.offsetX ?? 0);
+  const maxX = place(endpoint.maxX, placement?.originX ?? 0, placement?.offsetX ?? 0);
+  const minY = place(endpoint.minY, placement?.originY ?? 0, placement?.offsetY ?? 0);
+  const maxY = place(endpoint.maxY, placement?.originY ?? 0, placement?.offsetY ?? 0);
+  return maxX < clip.minX || minX > clip.maxX || maxY < clip.minY || minY > clip.maxY;
+}
+
+/** The frame without tracks that are clipped away entirely (see `trackIsClippedAway`). */
+export function framePaintedTracks(scene: LiquidSceneV2, frame: LiquidFrameSampleV2): LiquidFrameSampleV2 {
+  const tracks = frame.tracks.filter((track) => !trackIsClippedAway(scene, track));
+  return tracks.length === frame.tracks.length ? frame : { ...frame, tracks };
 }

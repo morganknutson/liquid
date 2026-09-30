@@ -186,13 +186,15 @@ function evaluateTrackFrame(scene: LiquidSceneV2, track: LiquidTrack, progress: 
     ? splineTrackState(track, sampledProgress)
     : easedTrackState(track, sampledProgress);
   const { componentMaterials, groupMaterials } = interpolated;
+  // Rigid tracks always show their exact target; placement moves it.
+  const endpointProgress = track.rigid === true ? 1 : localProgress;
   const opacity = reduced
     ? reducedOpacityV2(scene, progress)
-    : { sourceOpacity: localProgress === 1 ? 0 : 1, targetOpacity: localProgress === 0 ? 0 : localProgress === 1 ? 1 : 0 };
-  const renderMode = reduced ? "crossfade" : localProgress === 0 ? "sourcePath" : localProgress === 1 ? "targetPath" : "field";
-  const endpointCommands = !reduced && localProgress === 0
+    : { sourceOpacity: endpointProgress === 1 ? 0 : 1, targetOpacity: endpointProgress === 0 ? 0 : endpointProgress === 1 ? 1 : 0 };
+  const renderMode = reduced ? "crossfade" : endpointProgress === 0 ? "sourcePath" : endpointProgress === 1 ? "targetPath" : "field";
+  const endpointCommands = !reduced && endpointProgress === 0
     ? track.source.commands
-    : !reduced && localProgress === 1
+    : !reduced && endpointProgress === 1
       ? track.target.commands
       : null;
   const components: ComponentFrame[] = track.components.map((definition) => ({
